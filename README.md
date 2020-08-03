@@ -24,6 +24,6 @@ Omit $INSTALL_DIR for system-wide installation
    - Include sparingly, as any file that includes git_hash.h will be recompiled anytime
      the repository changes
 3. To create `<target>_hash.h`: git_hash_target(target)
-   - Defines TARGET_HASH, the hash of the target's SOURCES, LINK_LIBRARIES, and the contents
-     of it's (non-system) include directories
+   - Defines <TARGET>_HASH, the hash of the target's SOURCES, LINK_LIBRARIES, and the contents
+     of header files in its include directories
    - This hash should change anytime the target changes  
