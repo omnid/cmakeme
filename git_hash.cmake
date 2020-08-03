@@ -3,7 +3,7 @@ find_package(Git REQUIRED)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash.bash.in git_hash.bash @ONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash_target.bash.in git_hash_target.bash @ONLY)
 
-function(git_hash)
+function(cmakeme_git_hash)
    # Whenever make all (the default target) is built, update git_hash.h
    add_custom_target(git_hash ALL
                   COMMAND ${CMAKE_BINARY_DIR}/git_hash.bash ${CMAKE_BINARY_DIR}/git_hash.h
@@ -13,7 +13,7 @@ function(git_hash)
                  )
 endfunction()
 
-function(git_hash_target target)
+function(cmakeme_hash_target target)
   get_target_property(githash_libs ${target} LINK_LIBRARIES)
   get_target_property(githash_sources ${target} SOURCES)
   get_target_property(githash_includes ${target} INCLUDE_DIRECTORIES)
