@@ -12,7 +12,7 @@ git_dir=$(@GIT_EXECUTABLE@ rev-parse --show-toplevel)/
 head_sha1=$(@GIT_EXECUTABLE@ rev-parse HEAD)
 
 # get if the repository is dirty
-git diff --quiet HEAD
+@GIT_EXECUTABLE@ diff --quiet HEAD
 dirty=$?
 
 output=$1
