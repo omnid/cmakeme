@@ -1,0 +1,31 @@
+# Template PKGBUILD to be used by CPack to build archlinux packages
+# This is a binary package that just unpacks the binary tarball
+pkgname=@PROJECT_NAME@-bin
+pkgver=@PROJECT_VERSION@
+pkgrel=1
+epoch=
+pkgdesc=@CPACK_PACKAGE_DESCRIPTION@
+arch=@CMAKEME_PKGBUILD_ARCH@
+url="@CPACK_PACKAGE_HOMEPAGE_URL@"
+license=('MIT')
+groups=()
+depends=(arm-none-eabi-gcc arm-none-eabi-newlib)
+makedepends=()
+checkdepends=()
+optdepends=(arm-none-eabi-gdb ti-cgt-arm)
+provides=(@PROJECT_NAME@)
+conflicts=()
+replaces=()
+backup=()
+options=@CMAKEME_PKGBUILD_OPTIONS@
+install=
+changelog=
+source=("@PROJECT_NAME@-$pkgver-any.tar.gz")
+noextract=()
+md5sums=('@CPACK_PACKAGE_CHECKSUM@') 
+validpgpkeys=()
+
+package() {
+        mkdir @PROJECT_NAME@/usr
+	cp -r "@PROJECT_NAME@-$pkgver-any/"* $pkgdir/usr
+}
