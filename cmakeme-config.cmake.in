@@ -1,0 +1,4 @@
+@PACKAGE_INIT@
+include(cmakeme_defaults)
+include(cmakeme_install)
+include(git_hash)
