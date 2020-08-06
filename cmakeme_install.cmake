@@ -25,7 +25,8 @@ cmakeme_install(TARGET name
 * `ns`     - Namespace for name. Do not include the `::` after the namespace. The target will be found using
              `find_package(ns)` and used by adding `ns::target` to `target_link_libraries`
 * `incdir` - include directories that should be installed. The appropriate include directories
-             are automatically added so that dependent projects can find them.
+             are automatically added to the INSTALL_INTERFACE so that dependent projects can find them.
+             You must add them to the BUILD_INTERFACE if they are needed at buildtime     
 * `ARCH_INDEPENDENT` - Specify for header-only libraries or other libraries that
                        do not depend on being compiled for a specific target architecture.
 * `dependencies` - Targets that target depends upon.
@@ -80,7 +81,11 @@ function(cmakeme_install)
 
   # install headers
   foreach(incdir ${CMAKEME_INCLUDEDIRS})
-    install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    file(GLOB_RECURSE files ${incdir} "*" RELATIVE ${incdir})
+    foreach(file ${files})
+      install(FILES ${incdir}/${file}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${file})
+    endforeach()
   endfor()
 
   # If we are making this importable from other cmake projects
