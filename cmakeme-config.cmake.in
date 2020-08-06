@@ -1,5 +1,6 @@
 @PACKAGE_INIT@
-include(cmakeme_defaults)
-include(cmakeme_install)
-include(git_hash)
-include(cmakeme_pack)
+set(CMAKEME_INSTALL_DIR @PACKAGE_INSTALL_DIR@)
+include(${CMAKEME_INSTALL_DIR}/cmakeme_defaults.cmake)
+include(${CMAKEME_INSTALL_DIR}/cmakeme_install.cmake)
+include(${CMAKEME_INSTALL_DIR}/git_hash.cmake)
+include(${CMAKEME_INSTALL_DIR}/cmakeme_pack.cmake)
