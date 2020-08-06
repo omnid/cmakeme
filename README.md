@@ -67,4 +67,18 @@ which provides a hash of all the files used by a given target.
 3. To create `<target>_hash.h`: git_hash_target(target)
    - Defines <TARGET>_HASH, the hash of the target's SOURCES, LINK_LIBRARIES, and the contents
      of header files in its include directories
-   - This hash should change anytime the target changes  
+   - This hash should change anytime the target changes
+
+## CPack functionality
+Create Debian, ArchLinux, and archives of the installation.
+Building the packages is triggered with `cpack` or the `package` target (e.g., `make package`)
+See `cpack/cmakeme_pack.cmake` for details
+```
+cmakeme_package(EMAIL email
+                [ARCH_64 | ARCH_ANY ]
+                [DEBIAN_DEPENDS d1...]
+                [DEBIAN_RECOMMENDS r1 ...]
+                [ARCHLINUX_DEPENDS a1...]
+                [ARCHLINUX_RECOMMENDS a1...]
+                )
+```
