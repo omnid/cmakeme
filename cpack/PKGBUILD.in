@@ -9,20 +9,20 @@ arch=@CMAKEME_PKGBUILD_ARCH@
 url="@CPACK_PACKAGE_HOMEPAGE_URL@"
 license=('MIT')
 groups=()
-depends=(arm-none-eabi-gcc arm-none-eabi-newlib)
+depends=(@CMAKEME_PKGBUILD_DEPENDS@)
 makedepends=()
 checkdepends=()
-optdepends=(arm-none-eabi-gdb ti-cgt-arm)
+optdepends=(@CMAKEME_PKGBUILD_RECOMMENDS@)
 provides=(@PROJECT_NAME@)
 conflicts=()
 replaces=()
 backup=()
-options=@CMAKEME_PKGBUILD_OPTIONS@
+options=(!strip)
 install=
 changelog=
 source=("@PROJECT_NAME@-$pkgver-any.tar.gz")
 noextract=()
-md5sums=('@CPACK_PACKAGE_CHECKSUM@') 
+md5sums=('skip')
 validpgpkeys=()
 
 package() {
