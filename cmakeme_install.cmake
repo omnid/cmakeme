@@ -22,7 +22,7 @@ cmakeme_install(TARGET name
                 [CONFIG config]
                 )
 * `name` - the name of the target to install. 
-* `ns`     - Namespace for name. The target will be found using
+* `ns`     - Namespace for name. Do not include the `::` after the namespace. The target will be found using
              `find_package(ns)` and used by adding `ns::target` to `target_link_libraries`
 * `incdir` - include directories that should be installed. The appropriate include directories
              are automatically added so that dependent projects can find them.
@@ -70,7 +70,7 @@ function(cmakeme_install)
     )
 
   install(EXPORT ${CMAKEME_TARGET}-target 
-    NAMESPACE ${CMAKEME_NAMESPACE}
+    NAMESPACE ${CMAKEME_NAMESPACE}::
     DESTINATION ${libdir}/${CMAKEME_TARGET}
     )
 
