@@ -29,7 +29,9 @@ cmakeme_install(TARGET name
              You must add them to the BUILD_INTERFACE if they are needed at buildtime     
 * `ARCH_INDEPENDENT` - Specify for header-only libraries or other libraries that
                        do not depend on being compiled for a specific target architecture.
-* `dependencies` - Targets that target depends upon.
+* `dependencies` - Targets that target depends upon that should be included in the export set.
+                   (i.e., if the target is already installed within your project you don't need to include it here,
+                    but if cmake complains then add it)
 * `config` - The configuration file template to use. This file will be installed
              as `find-name-config.cmake` and executed when a dependent project calls `find_package(find-name)`
              It should `include` each `name-target.cmake` and use `find_dependency` to bring
