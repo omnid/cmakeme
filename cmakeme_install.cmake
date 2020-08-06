@@ -19,7 +19,7 @@ cmakeme_install(TARGET name
                 [INCLUDEDIRS incdir...] 
                 [ARCH_INDEPENDENT]
                 [DEPENDS dependencies...]
-                [CONFIG config]
+                [CONFIG config] [AS find-name]
                 )
 * `name` - the name of the target to install. 
 * `ns`     - Namespace for name. Do not include the `::` after the namespace. The target will be found using
@@ -31,10 +31,11 @@ cmakeme_install(TARGET name
                        do not depend on being compiled for a specific target architecture.
 * `dependencies` - Targets that target depends upon.
 * `config` - The configuration file template to use. This file will be installed
-             as `ns-config.cmake` and executed when a dependent project calls `find_package(ns)`
+             as `find-name-config.cmake` and executed when a dependent project calls `find_package(find-name)`
              It should `include` each `name-target.cmake` and use `find_dependency` to bring
              in any dependencies. May be omitted if you do not need to import the installed target
              from another cmake project.
+* `find-name` - name of the module when importing to `CMake` via `find_package`.  This defaults to the value of `ns`
 
 Most of these options are useful for installing libraries. For an executable target the optional arguments can usually be omitted.
 ]]
@@ -49,7 +50,7 @@ function(cmakeme_install)
   cmake_parse_arguments(
     "CMAKEME"
     "ARCH_INDEPENDENT"
-    "TARGET;NAMESPACE;CONFIG"
+    "TARGET;NAMESPACE;CONFIG;AS"
     "INCLUDEDIRS;DEPENDS"
     ${ARGN}
     )
@@ -92,27 +93,31 @@ function(cmakeme_install)
   if(NOT "CONFIG" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
     include(CMakePackageConfigHelpers)
 
+    if(NOT CMAKEME_AS)
+      set(CMAKEME_AS CMAKEME_NAMESPACE)
+    endif()
+
     if(CMAKEME_ARCH_INDEPENDENT) 
       write_basic_package_version_file(
-        ${CMAKEME_NAMESPACE}-config-version.cmake
+        ${CMAKEME_AS}-config-version.cmake
         COMPATIBILITY SameMajorVersion
         ARCH_INDEPENDENT
         )
     else()
       write_basic_package_version_file(
-        ${CMAKEME_NAMESPACE}-config-version.cmake
+        ${CMAKEME_AS}-config-version.cmake
         COMPATIBILITY SameMajorVersion
         )
     endif()
 
     # Used in case we need to export directories from NuhalConfig.cmake
-    configure_package_config_file(${CMAKEME_CONFIG}  ${CMAKEME_NAMESPACE}-config.cmake
-      INSTALL_DESTINATION ${libdir}/${CMAKEME_NAMESPACE} PATH_VARS)
+    configure_package_config_file(${CMAKEME_CONFIG}  ${CMAKEME_AS}-config.cmake
+      INSTALL_DESTINATION ${libdir}/${CMAKEME_AS} PATH_VARS)
 
     install(FILES
-      ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_NAMESPACE}-config.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_NAMESPACE}-config-version.cmake
-      DESTINATION ${libdir}/${CMAKEME_NAMESPACE})
+      ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_AS}-config.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_AS}-config-version.cmake
+      DESTINATION ${libdir}/${CMAKEME_AS})
   endif()
 
 endfunction()

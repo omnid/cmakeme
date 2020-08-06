@@ -40,7 +40,7 @@ CMake library for helping with some typical installation scenarios.
    ```
    cmakeme_install(TARGET library
                    NAMESPACE mylib
-                   INCLUDEDIRS include
+                   INCLUDEDIRS include/library
                    DEPENDS mylib1 mylib2
                    CONFIG mylib-config.cmake.in)
     ```
