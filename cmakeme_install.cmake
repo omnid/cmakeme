@@ -77,16 +77,16 @@ function(cmakeme_install)
 
 
   target_include_directories(${CMAKEME_TARGET} INTERFACE
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
 
   # install headers
   foreach(incdir ${CMAKEME_INCLUDEDIRS})
-    file(GLOB_RECURSE files ${incdir} "*" RELATIVE ${incdir})
+    file(GLOB_RECURSE files RELATIVE ${incdir} "${incdir}/*")
     foreach(file ${files})
       install(FILES ${incdir}/${file}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${file})
     endforeach()
-  endfor()
+  endforeach()
 
   # If we are making this importable from other cmake projects
   if(NOT "CONFIG" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
