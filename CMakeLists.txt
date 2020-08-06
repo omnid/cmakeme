@@ -19,4 +19,4 @@ install(FILES
   DESTINATION share/cmakeme
   )
 
-install(DIRECTORY cpack DESTINATION share)
+install(DIRECTORY cpack DESTINATION share/cmakeme)

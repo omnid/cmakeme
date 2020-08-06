@@ -1,5 +1,15 @@
 # Install a cmake target-specific library to the proper directories
-include(GNUInstallDirs)
+
+# fake a language being enabled if it was not to suprress warnings from GNUInstallDirs
+# This is a hack, but it is possible to want to know install directories without actually
+# compiling anything
+if(NOT DEFINED CMAKE_SYSTEM_NAME)
+  set(CMAKE_SYSTEM_NAME ${CMAKE_HOST_SYSTEM_NAME})
+  set(CMAKE_SIZEOF_VOID_P 8)
+  include(GNUInstallDirs)
+else()
+  include(GNUInstallDirs)
+endif()
 
 #[[ Install a target with the given name, according to cmakeme conventions.  
 cmakeme_install(TARGET name
