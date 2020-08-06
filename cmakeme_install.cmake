@@ -3,10 +3,12 @@
 # fake a language being enabled if it was not to suprress warnings from GNUInstallDirs
 # This is a hack, but it is possible to want to know install directories without actually
 # compiling anything
-if(NOT DEFINED CMAKE_SYSTEM_NAME)
+if(NOT DEFINED CMAKE_SYSTEM_NAME OR NOT DEFINED CMAKE_SIZEOF_VOID_P)
   set(CMAKE_SYSTEM_NAME ${CMAKE_HOST_SYSTEM_NAME})
   set(CMAKE_SIZEOF_VOID_P 8)
   include(GNUInstallDirs)
+  unset(CMAKE_SYSTEM_NAME)
+  unset(CMAKE_SIZEOF_VOID_P)
 else()
   include(GNUInstallDirs)
 endif()
