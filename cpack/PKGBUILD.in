@@ -5,7 +5,7 @@ pkgver=@PROJECT_VERSION@
 pkgrel=1
 epoch=
 pkgdesc=@CPACK_PACKAGE_DESCRIPTION@
-arch=@CMAKEME_PKGBUILD_ARCH@
+arch=(@CMAKEME_PKGBUILD_ARCH@)
 url="@CPACK_PACKAGE_HOMEPAGE_URL@"
 license=('MIT')
 groups=()
@@ -22,10 +22,10 @@ install=
 changelog=
 source=("@PROJECT_NAME@-$pkgver-any.tar.gz")
 noextract=()
-md5sums=('skip')
+md5sums=('SKIP') 
 validpgpkeys=()
 
 package() {
-        mkdir @PROJECT_NAME@/usr
-	cp -r "@PROJECT_NAME@-$pkgver-any/"* $pkgdir/usr
+        mkdir -p $pkgdir/usr
+	cp -r "@PROJECT_NAME@-$pkgver-$arch/"* $pkgdir/usr
 }
