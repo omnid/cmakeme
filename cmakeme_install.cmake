@@ -97,7 +97,7 @@ function(cmakeme_install)
     include(CMakePackageConfigHelpers)
 
     if(NOT CMAKEME_AS)
-      set(CMAKEME_AS CMAKEME_NAMESPACE)
+      set(CMAKEME_AS ${CMAKEME_NAMESPACE})
     endif()
 
     if(CMAKEME_ARCH_INDEPENDENT) 
