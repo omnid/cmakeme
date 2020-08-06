@@ -1,4 +1,4 @@
-set(cmakeme_pack_dir ${CMAKE_CURRENT_LIST_DIR})
+set(cmakeme_pack_dir ${CMAKE_CURRENT_LIST_DIR}/cpack)
 
 
 # Generate binary packages from a cmake installation. The packages
@@ -37,7 +37,7 @@ function(cmakeme_package)
   set(CMAKEME_PKGBUILD_RECOMMENDS ${CMAKEME_ARCHLINUX_RECOMMENDS})
 
   # The external target builds the archlinux package
-  set(CPACK_EXTERNAL_PACKAGE_SCRIPT "${cmakemepack_dir}/cmakeme_pkgbuild.cmake")
+  set(CPACK_EXTERNAL_PACKAGE_SCRIPT "${cmakeme_pack_dir}/cmakeme_pkgbuild.cmake")
   include(CPack)
-  configure_file(${cmakemepack_dir}/PKGBUILD.in ${CPACK_PACKAGE_DIRECTORY}/pkgbuild/PKGBUILD @ONLY)
+  configure_file(${cmakeme_pack_dir}/PKGBUILD.in ${CMAKE_BINARY_DIR}/pkgbuild/PKGBUILD @ONLY)
 endfunction()
