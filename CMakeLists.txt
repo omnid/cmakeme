@@ -13,6 +13,7 @@ install(FILES
   ${CMAKE_BINARY_DIR}/cmakeme-config.cmake #generated file
   cmakeme_defaults.cmake
   cmakeme_install.cmake
+  cmakeme_pack.cmake
   git_hash.bash.in
   git_hash.cmake
   git_hash_target.bash.in
