@@ -62,7 +62,9 @@ function(cmakeme_install)
     message(ERROR "Must specify a TARGET argument")
   endif()
     
-  
+  target_include_directories(${CMAKEME_TARGET} INTERFACE
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
+
   install(TARGETS ${CMAKEME_TARGET}  ${CMAKEME_DEPENDS}
     EXPORT ${CMAKEME_TARGET}-target
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -77,15 +79,14 @@ function(cmakeme_install)
     )
 
 
-  target_include_directories(${CMAKEME_TARGET} INTERFACE
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
 
   # install headers
   foreach(incdir ${CMAKEME_INCLUDEDIRS})
     file(GLOB_RECURSE files RELATIVE ${incdir} "${incdir}/*")
     foreach(file ${files})
+      get_filename_component(filedir ${file} DIRECTORY)
       install(FILES ${incdir}/${file}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${file})
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${filedir})
     endforeach()
   endforeach()
 
