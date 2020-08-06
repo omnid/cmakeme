@@ -2,3 +2,4 @@
 include(cmakeme_defaults)
 include(cmakeme_install)
 include(git_hash)
+include(cmakeme_pack)
