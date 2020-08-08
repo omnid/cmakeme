@@ -50,6 +50,8 @@ find_package(mylib)
 target_link_libraries(lib2 PUBLIC mylib::lib1)
 ```
 
+The dependency `dep1` is a package-level dependency (i.e., something found with `find_package`)
+
 You can usually use the above code as a guide, but there are more options and features,
 see comments in `cmakeme_install.cmake` for the full documentation.
 

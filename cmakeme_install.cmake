@@ -90,16 +90,20 @@ function(cmakeme_install)
     endforeach()
 
     get_target_property(srcs ${target} INTERFACE_SOURCES)
-    foreach(src ${src})
+    foreach(src ${srcs})
       # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
       string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" src ${src})
       # Next, ensure that the source file is from with the project
       string(FIND ${src} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
       if(starts_with EQUAL 0)
-        get_filename_component(fname ${src} NAME)
-        install(FILES ${src} DESTINATION ${CMAKE_INSTALL_PREFIX}/${libdir}/src/)
+        file(GLOB filerel RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${src})
+        get_filename_component(reldir ${filerel} DIRECTORY)
+        install(FILES ${src} DESTINATION ${CMAKE_INSTALL_PREFIX}/${libdir}/${target}/${reldir})
+        # add the source to the install interface
+        target_sources(${target} INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${libdir}/${target}/${filerel}>)
       endif()
     endforeach()
+    get_target_property(mysrc ${target} INTERFACE_SOURCES)
   endforeach()
 
   
