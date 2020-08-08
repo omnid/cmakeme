@@ -71,20 +71,22 @@ function(cmakeme_install)
 
   # Automatically find the header files that are included, install them,
   # and add them to the interface include directories
-  get_target_property(dirs ${CMAKEME_TARGET} INTERFACE_INCLUDE_DIRECTORIES)
-  if(dirs)
-    target_include_directories(${CMAKEME_TARGET} INTERFACE
-      $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
-  endif()
-  foreach(incdir ${dirs})
-    # if the include directory is within the source code we should install it
-    string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
-    if(starts_with EQUAL 0)
-      # make sure the directory ends with a /
-      string(APPEND incdir "/")
-      string(REPLACE "//" "/" incdir)
-      install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  foreach(target ${CMAKEME_TARGETS})
+    get_target_property(dirs ${target} INTERFACE_INCLUDE_DIRECTORIES)
+    if(dirs)
+      target_include_directories(${CMAKEME_TARGET} INTERFACE
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
     endif()
+    foreach(incdir ${dirs})
+      # if the include directory is within the source code we should install it
+      string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
+      if(starts_with EQUAL 0)
+        # make sure the directory ends with a /
+        string(APPEND incdir "/")
+        string(REPLACE "//" "/" incdir)
+        install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+      endif()
+    endforeach()
   endforeach()
 
   # If we are making this importable from other cmake projects
@@ -109,9 +111,13 @@ function(cmakeme_install)
     endif()
 
     # generate the package config file template
-    file(WRITE ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
+    file(WRITE ${CMAKEME_PACKAGE_NAME}-config.cmake.in
       "@PACKAGE_INIT@\n
        include(CMakeFindDependencyMacro)\n")
+    foreach(target ${CMAKEME_TARGETS})
+      file(APPEND ${CMAKEME_PACKAGE_NAME}-config.cmake.in
+        "include(\${CMAKE_CURRENT_LIST_DIR}/${target}.cmake)")
+    endforeach()
 
     foreach(dep ${CMAKEME_DEPENDS})
       file(APPEND ${CMAKEME_PACKAGE_NAME}-config.cmake.in
