@@ -25,10 +25,11 @@ cmakeme_install(TARGETS targets...
                 )
 * `targets - The targets that should be installed. This is the only option necessary if the targets do not need to be
              found by other cmake modules.
-* `ns`     - Namespace for name, defaults to find-name. Do not include the `::` after the namespace.
-*            Link against the configured targets by passing `ns::target` to `target_link_libraries`
+* `ns`     - Namespace for name. If not specified the targets will not be exported. Do not include the `::` after the namespace.
+             Link against the configured targets by passing `ns::target` to `target_link_libraries`
 * `ARCH_INDEPENDENT` - Specify for an architecture-independent library, such as a header-only library.
 * `name` - The name of the package, as used by `find_package`. So the package will be imported via `find_package(name)`
+           defaults to the value of `ns`
 * `deps` - The dependencies of the listed targets that should be found when `find_package(name)` is called
            In other words, imported dependencies that are required for using the target
 ]]
@@ -54,7 +55,10 @@ function(cmakeme_install)
   if("TARGETS" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
     message(FATAL_ERROR "Must specify a TARGET argument")
   endif()
-    
+
+  if("PACKAGE_NAME" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
+    set(CMAKEME_PACKAGE_NAME ${CMAKEME_NAMESPACE})
+  endif()
 
   install(TARGETS ${CMAKEME_TARGETS}
     EXPORT ${CMAKEME_PACKAGE_NAME}-targets
@@ -90,7 +94,7 @@ function(cmakeme_install)
   endforeach()
 
   # If we are making this importable from other cmake projects
-  if(NOT "CONFIG" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
+  if(NOT "NAMESPACE" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
     include(CMakePackageConfigHelpers)
 
     if(NOT CMAKEME_AS)

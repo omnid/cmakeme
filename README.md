@@ -35,19 +35,26 @@ Sets up some default settings including:
 ## Install Helpers
 CMake library for helping with some typical installation scenarios.
 
-1. To install some targets
-   ```
-   cmakeme_install(TARGETS <target>...
-                   NAMESPACE ns
-                   [ARCH_INDEPENDENT]
-                   PACKAGE_NAME package
-                   DEPENDS deps...)
-    ```
-    1. Use the package by doing `find_package(mypackage)` and including `ns::target` in the `target_link_libraries`
-    2. The listed dependencies will automatically be imported
-    3. Header files that are part of INTERFACE_INCLUDE_DIRECTORIES under the `$<BUILD_INTERFACE>` will be installed and accessible
-       from other cmake projects
-    4. For more details, see the comments in `cmakeme_install.cmake`
+Install the specified targets. If the target is a library its INTERFACE include directories will also be installed
+and the appropriate paths will be added to the exported library. If the target has INTERFACE_SOURCES these will
+be installed as well.
+```
+cmakeme_install(TARGETS targets... 
+                [NAMESPACE ns]
+                [ARCH_INDEPENDENT]
+                [PACKAGE_NAME name]
+                [DEPENDS deps..]
+                )
+```
+* `targets - The targets that should be installed. This is the only option necessary if the targets do not need to be
+             found by other cmake modules.
+* `ns`     - Namespace for name. If not specified the targets will not be exported. Do not include the `::` after the namespace.
+*            Link against the configured targets by passing `ns::target` to `target_link_libraries`
+* `ARCH_INDEPENDENT` - Specify for an architecture-independent library, such as a header-only library.
+* `name` - The name of the package, as used by `find_package`. So the package will be imported via `find_package(name)`
+           defaults to the value of `ns`
+* `deps` - The dependencies of the listed targets that should be found when `find_package(name)` is called
+           In other words, imported dependencies that are required for using the target
 
 ## Git Hash
 CMake library for computing git hashes and incorporating them into your code.
