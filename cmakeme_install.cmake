@@ -74,7 +74,7 @@ function(cmakeme_install)
   foreach(target ${CMAKEME_TARGETS})
     get_target_property(dirs ${target} INTERFACE_INCLUDE_DIRECTORIES)
     if(dirs)
-      target_include_directories(${CMAKEME_TARGET} INTERFACE
+      target_include_directories(${target} INTERFACE
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
     endif()
     foreach(incdir ${dirs})
