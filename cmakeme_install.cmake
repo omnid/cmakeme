@@ -114,10 +114,8 @@ function(cmakeme_install)
     file(WRITE ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
       "@PACKAGE_INIT@\n
        include(CMakeFindDependencyMacro)\n")
-    foreach(target ${CMAKEME_TARGETS})
-      file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
-        "include(\${CMAKE_CURRENT_LIST_DIR}/${target}.cmake)\n")
-    endforeach()
+    file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
+        "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKEME_PACKAGE_NAME}-targets.cmake)\n")
 
     foreach(dep ${CMAKEME_DEPENDS})
       file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
