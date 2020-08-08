@@ -32,6 +32,11 @@ cmakeme_install(TARGETS targets...
            defaults to the value of `ns`
 * `deps` - The dependencies of the listed targets that should be found when `find_package(name)` is called
            In other words, imported dependencies that are required for using the target
+
+Use `target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>) to add include directories
+and `target_sources(target INTERFACE $<BUILD_INTERFACE:source>)` to add source files.  The `$<BUILD_INTERFACE:>`
+generator expression only adds the items in it during build time.  At install time, the location of the files
+moves.  `cmakeme_install` will add the proper paths to the `$<INSTALL_INTERFACE:>` for use at installation time.
 ]]
 
 function(cmakeme_install)
@@ -70,15 +75,29 @@ function(cmakeme_install)
     endif()
 
     foreach(incdir ${dirs})
-      # if the include directory is within the source code we should install it
+      # if the include directory is within the source code we should install it.
       # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
       string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" incdir ${incdir})
+      # then make sure that the include file is from within the project and
+      # not something that comes from an external project
       string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
       if(starts_with EQUAL 0)
         # make sure the directory ends with a /
         string(APPEND incdir "/")
         string(REPLACE "//" "/" incdir ${incdir})
         install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+      endif()
+    endforeach()
+
+    get_target_property(srcs ${target} INTERFACE_SOURCES)
+    foreach(src in ${src})
+      # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
+      string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" src ${src})
+      # Next, ensure that the source file is from with the project
+      string(FIND ${src} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
+      if(starts_with EQUAL 0)
+        get_filename_component(fname ${src} NAME)
+        install(FILES ${src} DESTINATION ${CMAKE_INSTALL_PREFIX}/${libdir}/src/)
       endif()
     endforeach()
   endforeach()

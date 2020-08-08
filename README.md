@@ -33,28 +33,25 @@ Sets up some default settings including:
 3. Disables non-standard C and C++ language extensions
 
 ## Install Helpers
-CMake library for helping with some typical installation scenarios.
+CMake library for helping with some typical installation scenarios, provides the `cmakeme_install` function.
 
-Install the specified targets. If the target is a library its INTERFACE include directories will also be installed
-and the appropriate paths will be added to the exported library. If the target has INTERFACE_SOURCES these will
-be installed as well.
+For example, 
 ```
-cmakeme_install(TARGETS targets... 
-                [NAMESPACE ns]
-                [ARCH_INDEPENDENT]
-                [PACKAGE_NAME name]
-                [DEPENDS deps..]
-                )
+add_executable(target1 file1.c file2.c)
+add_library(lib1 file3.c)
+target_linke_libraries(lib1 PUBLIC dep1)
+target_include_directories(lib1 PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+cmakeme_install(TARGETS target1 lib1 NAMESPACE mylib DEPENDS dep1)
 ```
-* `targets - The targets that should be installed. This is the only option necessary if the targets do not need to be
-             found by other cmake modules.
-* `ns`     - Namespace for name. If not specified the targets will not be exported. Do not include the `::` after the namespace.
-*            Link against the configured targets by passing `ns::target` to `target_link_libraries`
-* `ARCH_INDEPENDENT` - Specify for an architecture-independent library, such as a header-only library.
-* `name` - The name of the package, as used by `find_package`. So the package will be imported via `find_package(name)`
-           defaults to the value of `ns`
-* `deps` - The dependencies of the listed targets that should be found when `find_package(name)` is called
-           In other words, imported dependencies that are required for using the target
+Once installed the library `lib1` can then be used from another cmake project:
+```
+find_package(mylib)
+...
+target_link_libraries(lib2 PUBLIC mylib::lib1)
+```
+
+You can usually use the above code as a guide, but there are more options and features,
+see comments in `cmakeme_install.cmake` for the full documentation.
 
 ## Git Hash
 CMake library for computing git hashes and incorporating them into your code.
