@@ -49,7 +49,7 @@ function(cmakeme_install)
     ${ARGN}
     )
   if(CMAKEME_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "Unrecognized arguments to cmakeme_install")
+    message(FATAL_ERROR "Unrecognized arguments to cmakeme_install: ${CMAKEME_UNPARSED_ARGUMENTS}")
   endif()
 
   if("TARGETS" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
