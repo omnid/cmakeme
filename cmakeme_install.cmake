@@ -115,16 +115,16 @@ function(cmakeme_install)
     endif()
 
     # generate the package config file template
-    file(WRITE ${CMAKEME_PACKAGE_NAME}-config.cmake.in
+    file(WRITE ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
       "@PACKAGE_INIT@\n
        include(CMakeFindDependencyMacro)\n")
     foreach(target ${CMAKEME_TARGETS})
-      file(APPEND ${CMAKEME_PACKAGE_NAME}-config.cmake.in
-        "include(\${CMAKE_CURRENT_LIST_DIR}/${target}.cmake)")
+      file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
+        "include(\${CMAKE_CURRENT_LIST_DIR}/${target}.cmake)\n")
     endforeach()
 
     foreach(dep ${CMAKEME_DEPENDS})
-      file(APPEND ${CMAKEME_PACKAGE_NAME}-config.cmake.in
+      file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
         "find_dependency(${dep})\n")
     endforeach()
     # The configure file is now generated it is a template designed to be used with configure_package_config_file
