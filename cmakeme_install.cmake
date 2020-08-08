@@ -60,6 +60,30 @@ function(cmakeme_install)
     set(CMAKEME_PACKAGE_NAME ${CMAKEME_NAMESPACE})
   endif()
 
+  # Automatically find the header files that are included, install them,
+  # and add them to the interface include directories
+  foreach(target ${CMAKEME_TARGETS})
+    get_target_property(dirs ${target} INTERFACE_INCLUDE_DIRECTORIES)
+    if(dirs)
+      target_include_directories(${target} INTERFACE
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+    endif()
+
+    foreach(incdir ${dirs})
+      # if the include directory is within the source code we should install it
+      # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
+      string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" incdir ${incdir})
+      string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
+      if(starts_with EQUAL 0)
+        # make sure the directory ends with a /
+        string(APPEND incdir "/")
+        string(REPLACE "//" "/" incdir ${incdir})
+        install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+      endif()
+    endforeach()
+  endforeach()
+
+  
   install(TARGETS ${CMAKEME_TARGETS}
     EXPORT ${CMAKEME_PACKAGE_NAME}-targets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -73,25 +97,6 @@ function(cmakeme_install)
     DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME}
     )
 
-  # Automatically find the header files that are included, install them,
-  # and add them to the interface include directories
-  foreach(target ${CMAKEME_TARGETS})
-    get_target_property(dirs ${target} INTERFACE_INCLUDE_DIRECTORIES)
-    if(dirs)
-      target_include_directories(${target} INTERFACE
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
-    endif()
-    foreach(incdir ${dirs})
-      # if the include directory is within the source code we should install it
-      string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
-      if(starts_with EQUAL 0)
-        # make sure the directory ends with a /
-        string(APPEND incdir "/")
-        string(REPLACE "//" "/" incdir)
-        install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-      endif()
-    endforeach()
-  endforeach()
 
   # If we are making this importable from other cmake projects
   if(NOT "NAMESPACE" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
