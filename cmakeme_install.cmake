@@ -97,19 +97,15 @@ function(cmakeme_install)
   if(NOT "NAMESPACE" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
     include(CMakePackageConfigHelpers)
 
-    if(NOT CMAKEME_AS)
-      set(CMAKEME_AS ${CMAKEME_NAMESPACE})
-    endif()
-
     if(CMAKEME_ARCH_INDEPENDENT) 
       write_basic_package_version_file(
-        ${CMAKEME_AS}-config-version.cmake
+        ${CMAKEME_PACKAGE_NAME}-config-version.cmake
         COMPATIBILITY SameMajorVersion
         ARCH_INDEPENDENT
         )
     else()
       write_basic_package_version_file(
-        ${CMAKEME_AS}-config-version.cmake
+        ${CMAKEME_PACKAGE_NAME}-config-version.cmake
         COMPATIBILITY SameMajorVersion
         )
     endif()
@@ -131,13 +127,13 @@ function(cmakeme_install)
     
     # Used in case we need to export directories from NuhalConfig.cmake
     configure_package_config_file(${CMAKEME_PACKAGE_NAME}-config.cmake.in
-      ${CMAKEME_AS}-config.cmake
-      INSTALL_DESTINATION ${libdir}/${CMAKEME_AS} PATH_VARS)
+      ${CMAKEME_PACKAGE_NAME}-config.cmake
+      INSTALL_DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME} PATH_VARS)
 
     install(FILES
-      ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_AS}-config.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_AS}-config-version.cmake
-      DESTINATION ${libdir}/${CMAKEME_AS})
+      ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config-version.cmake
+      DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME})
   endif()
 
 endfunction()
