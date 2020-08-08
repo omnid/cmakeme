@@ -34,7 +34,7 @@ cmakeme_install(TARGETS targets...
            In other words, imported dependencies that are required for using the target
 
 Use `target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>) to add include directories
-and `target_sources(target INTERFACE $<BUILD_INTERFACE:source>)` to add source files.  The `$<BUILD_INTERFACE:>`
+and `target_sources(target INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source1>... )` to add source files.  The `$<BUILD_INTERFACE:>`
 generator expression only adds the items in it during build time.  At install time, the location of the files
 moves.  `cmakeme_install` will add the proper paths to the `$<INSTALL_INTERFACE:>` for use at installation time.
 ]]
@@ -90,7 +90,7 @@ function(cmakeme_install)
     endforeach()
 
     get_target_property(srcs ${target} INTERFACE_SOURCES)
-    foreach(src in ${src})
+    foreach(src ${src})
       # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
       string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" src ${src})
       # Next, ensure that the source file is from with the project
