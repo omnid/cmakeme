@@ -44,7 +44,7 @@ function(cmakeme_install)
     "CMAKEME"
     "ARCH_INDEPENDENT"
     "NAMESPACE;PACKAGE_NAME"
-    "DEPENDS"
+    "TARGETS;DEPENDS"
     ${ARGN}
     )
   if(CMAKEME_UNPARSED_ARGUMENTS)
