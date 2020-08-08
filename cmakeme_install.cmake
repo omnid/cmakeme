@@ -126,7 +126,7 @@ function(cmakeme_install)
     # The configure file is now generated it is a template designed to be used with configure_package_config_file
     
     # Used in case we need to export directories from NuhalConfig.cmake
-    configure_package_config_file(${CMAKEME_PACKAGE_NAME}-config.cmake.in
+    configure_package_config_file(${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
       ${CMAKEME_PACKAGE_NAME}-config.cmake
       INSTALL_DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME} PATH_VARS)
 
