@@ -47,7 +47,7 @@ function(cmakeme_install)
   endif()
 
   cmake_parse_arguments(
-    "CMAKEME"
+    CMAKEME
     "ARCH_INDEPENDENT"
     "NAMESPACE;PACKAGE_NAME"
     "TARGETS;DEPENDS"
@@ -57,11 +57,11 @@ function(cmakeme_install)
     message(FATAL_ERROR "Unrecognized arguments to cmakeme_install: ${CMAKEME_UNPARSED_ARGUMENTS}")
   endif()
 
-  if("TARGETS" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
-    message(FATAL_ERROR "Must specify a TARGET argument")
+  if(NOT DEFINED CMAKEME_TARGETS)
+    message(FATAL_ERROR "Must specify a TARGETS argument")
   endif()
 
-  if("PACKAGE_NAME" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
+  if(NOT DEFINED CMAKEME_PACKAGE_NAME)
     set(CMAKEME_PACKAGE_NAME ${CMAKEME_NAMESPACE})
   endif()
 
