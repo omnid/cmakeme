@@ -35,20 +35,19 @@ Sets up some default settings including:
 ## Install Helpers
 CMake library for helping with some typical installation scenarios.
 
-1. To install an executable target: `cmakeme_install(TARGET executable)```
-2. To install a library target:
+1. To install some targets
    ```
-   cmakeme_install(TARGET library
-                   NAMESPACE mylib
-                   INCLUDEDIRS include/library
-                   CONFIG mylib-config.cmake.in)
+   cmakeme_install(TARGETS <target>...
+                   NAMESPACE ns
+                   [ARCH_INDEPENDENT]
+                   PACKAGE_NAME package
+                   DEPENDS deps...)
     ```
-    1. `mylib-config.cmake-in` should be compatible with
-       [configure_package_config](https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html#command:configure_package_config_file)
-       * It imports targets installed under the specified namespace using `include`
-       * It imports any dependencies using [https://cmake.org/cmake/help/latest/module/CMakeFindDependencyMacro.html](find_dependency)
-    2. Another CMake project can then find the library using `find_package` with the specified namespace (e.g., `find_package(mylib)`)
-    3. For more details, see the comments in `cmakeme_install.cmake`
+    1. Use the package by doing `find_package(mypackage)` and including `ns::target` in the `target_link_libraries`
+    2. The listed dependencies will automatically be imported
+    3. Header files that are part of INTERFACE_INCLUDE_DIRECTORIES under the `$<BUILD_INTERFACE>` will be installed and accessible
+       from other cmake projects
+    4. For more details, see the comments in `cmakeme_install.cmake`
 
 ## Git Hash
 CMake library for computing git hashes and incorporating them into your code.

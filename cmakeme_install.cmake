@@ -1,6 +1,6 @@
 # Install a cmake target-specific library to the proper directories
 
-# fake a language being enabled if it was not to suprress warnings from GNUInstallDirs
+# fake a language being enabled if it was not to supress warnings from GNUInstallDirs
 # This is a hack, but it is possible to want to know install directories without actually
 # compiling anything
 if(NOT DEFINED CMAKE_SYSTEM_NAME OR NOT DEFINED CMAKE_SIZEOF_VOID_P)
@@ -13,33 +13,24 @@ else()
   include(GNUInstallDirs)
 endif()
 
-#[[ Install a target with the given name, according to cmakeme conventions.  
-cmakeme_install(TARGET name
+#[[
+    Install the specified targets. If the target is a library its INTERFACE include directories will also be installed
+    and the appropriate paths will be added to the exported library. If the target has INTERFACE_SOURCES these will
+    be installed as well.
+cmakeme_install(TARGETS targets... 
                 [NAMESPACE ns]
-                [INCLUDEDIRS incdir...] 
                 [ARCH_INDEPENDENT]
-                [DEPENDS dependencies...]
-                [CONFIG config] [AS find-name]
+                [PACKAGE_NAME name]
+                [DEPENDS deps..]
                 )
-* `name` - the name of the target to install. 
-* `ns`     - Namespace for name. Do not include the `::` after the namespace. The target will be found using
-             `find_package(ns)` and used by adding `ns::target` to `target_link_libraries`
-* `incdir` - include directories that should be installed. The appropriate include directories
-             are automatically added to the INSTALL_INTERFACE so that dependent projects can find them.
-             You must add them to the BUILD_INTERFACE if they are needed at buildtime     
-* `ARCH_INDEPENDENT` - Specify for header-only libraries or other libraries that
-                       do not depend on being compiled for a specific target architecture.
-* `dependencies` - Targets that target depends upon that should be included in the export set.
-                   (i.e., if the target is already installed within your project you don't need to include it here,
-                    but if cmake complains then add it)
-* `config` - The configuration file template to use. This file will be installed
-             as `find-name-config.cmake` and executed when a dependent project calls `find_package(find-name)`
-             It should `include` each `name-target.cmake` and use `find_dependency` to bring
-             in any dependencies. May be omitted if you do not need to import the installed target
-             from another cmake project.
-* `find-name` - name of the module when importing to `CMake` via `find_package`.  This defaults to the value of `ns`
-
-Most of these options are useful for installing libraries. For an executable target the optional arguments can usually be omitted.
+* `targets - The targets that should be installed. This is the only option necessary if the targets do not need to be
+             found by other cmake modules.
+* `ns`     - Namespace for name, defaults to find-name. Do not include the `::` after the namespace.
+*            Link against the configured targets by passing `ns::target` to `target_link_libraries`
+* `ARCH_INDEPENDENT` - Specify for an architecture-independent library, such as a header-only library.
+* `name` - The name of the package, as used by `find_package`. So the package will be imported via `find_package(name)`
+* `deps` - The dependencies of the listed targets that should be found when `find_package(name)` is called
+           In other words, imported dependencies that are required for using the target
 ]]
 
 function(cmakeme_install)
@@ -52,44 +43,48 @@ function(cmakeme_install)
   cmake_parse_arguments(
     "CMAKEME"
     "ARCH_INDEPENDENT"
-    "TARGET;NAMESPACE;CONFIG;AS"
-    "INCLUDEDIRS;DEPENDS"
+    "NAMESPACE;PACKAGE_NAME"
+    "DEPENDS"
     ${ARGN}
     )
   if(CMAKEME_UNPARSED_ARGUMENTS)
-    message(ERROR "Unrecognized arguments to cmakeme_install")
+    message(FATAL_ERROR "Unrecognized arguments to cmakeme_install")
   endif()
 
-  if("TARGET" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
-    message(ERROR "Must specify a TARGET argument")
+  if("TARGETS" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
+    message(FATAL_ERROR "Must specify a TARGET argument")
   endif()
     
-  target_include_directories(${CMAKEME_TARGET} INTERFACE
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
 
-  install(TARGETS ${CMAKEME_TARGET}  ${CMAKEME_DEPENDS}
-    EXPORT ${CMAKEME_TARGET}-target
+  install(TARGETS ${CMAKEME_TARGETS}
+    EXPORT ${CMAKEME_PACKAGE_NAME}-targets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION  ${libdir}
     ARCHIVE DESTINATION  ${libdir}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
-  install(EXPORT ${CMAKEME_TARGET}-target 
+  install(EXPORT ${CMAKEME_PACKAGE_NAME}-targets
     NAMESPACE ${CMAKEME_NAMESPACE}::
-    DESTINATION ${libdir}/${CMAKEME_TARGET}
+    DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME}
     )
 
-
-
-  # install headers
-  foreach(incdir ${CMAKEME_INCLUDEDIRS})
-    file(GLOB_RECURSE files RELATIVE ${incdir} "${incdir}/*")
-    foreach(file ${files})
-      get_filename_component(filedir ${file} DIRECTORY)
-      install(FILES ${incdir}/${file}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${filedir})
-    endforeach()
+  # Automatically find the header files that are included, install them,
+  # and add them to the interface include directories
+  get_target_property(dirs ${CMAKEME_TARGET} INTERFACE_INCLUDE_DIRECTORIES)
+  if(dirs)
+    target_include_directories(${CMAKEME_TARGET} INTERFACE
+      $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>)
+  endif()
+  foreach(incdir ${dirs})
+    # if the include directory is within the source code we should install it
+    string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
+    if(starts_with EQUAL 0)
+      # make sure the directory ends with a /
+      string(APPEND incdir "/")
+      string(REPLACE "//" "/" incdir)
+      install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    endif()
   endforeach()
 
   # If we are making this importable from other cmake projects
@@ -113,8 +108,20 @@ function(cmakeme_install)
         )
     endif()
 
+    # generate the package config file template
+    file(WRITE ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
+      "@PACKAGE_INIT@\n
+       include(CMakeFindDependencyMacro)\n")
+
+    foreach(dep ${CMAKEME_DEPENDS})
+      file(APPEND ${CMAKEME_PACKAGE_NAME}-config.cmake.in
+        "find_dependency(${dep})\n")
+    endforeach()
+    # The configure file is now generated it is a template designed to be used with configure_package_config_file
+    
     # Used in case we need to export directories from NuhalConfig.cmake
-    configure_package_config_file(${CMAKEME_CONFIG}  ${CMAKEME_AS}-config.cmake
+    configure_package_config_file(${CMAKEME_PACKAGE_NAME}-config.cmake.in
+      ${CMAKEME_AS}-config.cmake
       INSTALL_DESTINATION ${libdir}/${CMAKEME_AS} PATH_VARS)
 
     install(FILES
