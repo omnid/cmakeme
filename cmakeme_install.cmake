@@ -32,7 +32,7 @@ cmakeme_install(TARGETS targets...
            defaults to the value of `ns`
 * `deps` - The dependencies of the listed targets that should be found when `find_package(name)` is called
            In other words, imported dependencies that are required for using the target
-
+*
 Use `target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>) to add include directories
 and `target_sources(target INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source1>... )` to add source files.  The `$<BUILD_INTERFACE:>`
 generator expression only adds the items in it during build time.  At install time, the location of the files
@@ -63,9 +63,6 @@ function(cmakeme_install)
 
   if(NOT DEFINED CMAKEME_PACKAGE_NAME)
     set(CMAKEME_PACKAGE_NAME ${CMAKEME_NAMESPACE})
-    if(NOT CMAKEME_PACKAGE_NAME)
-      message(FATAL_ERROR "Must specify a NAMESPACE or a PACKAGE_NAME"
-    endif()
   endif()
 
   # Automatically find the header files that are included, install them,
@@ -118,15 +115,16 @@ function(cmakeme_install)
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
-  install(EXPORT ${CMAKEME_PACKAGE_NAME}-targets
-    NAMESPACE ${CMAKEME_NAMESPACE}::
-    DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME}
-    )
 
 
   # If we are making this importable from other cmake projects
-  if(NOT "NAMESPACE" IN_LIST CMAKEME_KEYWORDS_MISSING_VALUES)
+  if(DEFINED CMAKEME_NAMESPACE)
     include(CMakePackageConfigHelpers)
+
+    install(EXPORT ${CMAKEME_PACKAGE_NAME}-targets
+      NAMESPACE ${CMAKEME_NAMESPACE}::
+      DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME}
+      )
 
     if(CMAKEME_ARCH_INDEPENDENT) 
       write_basic_package_version_file(
