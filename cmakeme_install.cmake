@@ -63,6 +63,9 @@ function(cmakeme_install)
 
   if(NOT DEFINED CMAKEME_PACKAGE_NAME)
     set(CMAKEME_PACKAGE_NAME ${CMAKEME_NAMESPACE})
+    if(NOT CMAKEME_PACKAGE_NAME)
+      message(FATAL_ERROR "Must specify a NAMESPACE or a PACKAGE_NAME"
+    endif()
   endif()
 
   # Automatically find the header files that are included, install them,
