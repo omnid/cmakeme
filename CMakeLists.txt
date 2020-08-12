@@ -21,3 +21,6 @@ install(FILES
   )
 
 install(DIRECTORY cpack DESTINATION share/cmakeme)
+
+enable_testing()
+add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tivacmake")
