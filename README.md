@@ -64,7 +64,7 @@ which provides a hash of all the files used by a given target.
 
 To use:
 `cmakeme_hash(target)`
-- Then you include `cmakeme/${target}_hash.h` in a C file where `${target}` is the name of the cmake target
+- Then you include `${PROJECT_NAME}/${target}_hash.h` in a C file where `${target}` is the name of the cmake target and ${PROJECT_NAME} is the name of your cmake project
    - Defines GIT_HASH, the hash of the last commit
    - Defines GIT_HASH_DIRTY, which is true if there are uncommitted changes
    - Defines GIT_HASH_<TARGET>, the hash of the target's SOURCES, LINK_LIBRARIES, and the contents
