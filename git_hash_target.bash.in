@@ -36,7 +36,7 @@ cat > "$header" <<EOF
 #ifndef ${target^^}_GIT_HASH_INCLUDE_GUARD
 #define ${target^^}_GIT_HASH_INCLUDE_GUARD
 #include "cmakeme/git_hash.h"
-#define ${target^^}_HASH "$hash"
+#define GIT_HASH_${target^^} "$hash"
 #endif
 EOF
 
