@@ -1,7 +1,9 @@
 find_package(Git REQUIRED)
 
-configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash.bash.in git_hash.bash @ONLY)
-configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash_target.bash.in git_hash_target.bash @ONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash.bash.in tmp/git_hash.bash @ONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash_target.bash.in tmp/git_hash_target.bash @ONLY)
+file(COPY tmp/git_hash.bash  tmp/git_has_target.bash DESTINATION ${CMAKE_BINARY_DIR}
+  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # add the githash target
 add_custom_target(git_hash ALL
