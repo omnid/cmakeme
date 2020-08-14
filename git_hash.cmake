@@ -7,7 +7,7 @@ configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash.bash.in
 configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash_target.bash.in
   ${CMAKE_BINARY_DIR}/tmp/git_hash_target.bash @ONLY)
 
-file(COPY ${CMAKE_BINARY_DIR}/tmp/git_hash.bash  ${CMAKE_BINARY_DIR}/tmp/git_has_target.bash
+file(COPY ${CMAKE_BINARY_DIR}/tmp/git_hash.bash  ${CMAKE_BINARY_DIR}/tmp/git_hash_target.bash
   DESTINATION ${CMAKE_BINARY_DIR}
   FILE_PERMISSIONS
   OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
