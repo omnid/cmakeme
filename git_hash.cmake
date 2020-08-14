@@ -3,8 +3,10 @@ find_package(Git REQUIRED)
 # configure files to temporary directory so they cna be copied and given execute permissions
 configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash.bash.in
   ${CMAKE_BINARY_DIR}/tmp/git_hash.bash @ONLY)
+
 configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash_target.bash.in
   ${CMAKE_BINARY_DIR}/tmp/git_hash_target.bash @ONLY)
+
 file(COPY ${CMAKE_BINARY_DIR}/tmp/git_hash.bash  ${CMAKE_BINARY_DIR}/tmp/git_has_target.bash
   DESTINATION ${CMAKE_BINARY_DIR}
   FILE_PERMISSIONS
