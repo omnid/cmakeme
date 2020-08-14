@@ -63,7 +63,7 @@ which provides the hash of the current commit and indicates if it is dirty and `
 which provides a hash of all the files used by a given target.
 
 1. To Load `git_hash`: `find_package(cmakeme)`
-2. To create `git_hash.h`: git_hash()
+2. To create `cmakeme/git_hash.h`: git_hash()
    - Defines GIT_HASH, the hash of the last commit
    - Defines GIT_HASH_DIRTY, which is true if there are uncommitted changes
    - Include sparingly, as any file that includes git_hash.h will be recompiled anytime
