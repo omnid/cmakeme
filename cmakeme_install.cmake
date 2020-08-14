@@ -42,8 +42,10 @@ moves.  `cmakeme_install` will add the proper paths to the `$<INSTALL_INTERFACE:
 function(cmakeme_install)
   if(CMAKE_CROSSCOMPILING)
     set(libdir ${CMAKE_INSTALL_LIBDIR}/${CMAKE_LIBRARY_ARCHITECTURE})
+    set(bindir ${CMAKE_INSTALL_BINDIR}/${CMAKE_LIBRARY_ARCHITECTURE})
   else()
     set(libdir ${CMAKE_INSTALL_LIBDIR})
+    set(binder ${CMAKE_INSTALL_BINDIR})
   endif()
 
   cmake_parse_arguments(
@@ -109,7 +111,7 @@ function(cmakeme_install)
   
   install(TARGETS ${CMAKEME_TARGETS}
     EXPORT ${CMAKEME_PACKAGE_NAME}-targets
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RUNTIME DESTINATION ${bindir}
     LIBRARY DESTINATION  ${libdir}
     ARCHIVE DESTINATION  ${libdir}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
