@@ -3,17 +3,16 @@ find_package(Git REQUIRED)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash.bash.in git_hash.bash @ONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/git_hash_target.bash.in git_hash_target.bash @ONLY)
 
-function(cmakeme_git_hash)
-   # Whenever make all (the default target) is built, update git_hash.h
-   add_custom_target(git_hash ALL
-                  COMMAND ${CMAKE_BINARY_DIR}/git_hash.bash ${CMAKE_BINARY_DIR}/git_hash.h
-                  COMMENT "Updating git_hash.h"
-                  BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/git_hash.h
-                  VERBATIM
-                 )
-endfunction()
+# add the githash target
+add_custom_target(git_hash ALL
+  COMMAND ${CMAKE_BINARY_DIR}/git_hash.bash ${CMAKE_BINARY_DIR}/cmakeme/include/cmakeme/git_hash.h
+  COMMENT "Updating git_hash.h"
+  BYPRODUCTS ${CMAKE_BINARY_DIR}/cmakeme/include/cmakeme/git_hash.h
+  VERBATIM
+  )
 
-function(cmakeme_hash_target target)
+# Create target_hash.h which contains hashes of the current git repository and the target's dependencies
+function(cmakeme_hash target)
   get_target_property(githash_libs ${target} LINK_LIBRARIES)
   get_target_property(githash_sources ${target} SOURCES)
   get_target_property(githash_includes ${target} INCLUDE_DIRECTORIES)
@@ -33,4 +32,5 @@ function(cmakeme_hash_target target)
     VERBATIM
     )
   add_dependencies(${target} git_hash_${target})
+  target_include_directories(${target} PUBLIC ${CMAKE_BINARY_DIR}/cmakeme/include/)
 endfunction()

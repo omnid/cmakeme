@@ -62,16 +62,16 @@ Provides the ability to generate two header files at compile time: `git_hash.h`,
 which provides the hash of the current commit and indicates if it is dirty and `<target>_hash.h
 which provides a hash of all the files used by a given target.
 
-1. To Load `git_hash`: `find_package(cmakeme)`
-2. To create `cmakeme/git_hash.h`: git_hash()
+To use:
+`cmakeme_hash(target)`
+- Then you include `cmakeme/${target}_hash.h` in a C file where `${target}` is the name of the cmake target
    - Defines GIT_HASH, the hash of the last commit
    - Defines GIT_HASH_DIRTY, which is true if there are uncommitted changes
-   - Include sparingly, as any file that includes git_hash.h will be recompiled anytime
-     the repository changes
-3. To create `<target>_hash.h`: git_hash_target(target)
    - Defines <TARGET>_HASH, the hash of the target's SOURCES, LINK_LIBRARIES, and the contents
      of header files in its include directories
    - This hash should change anytime the target changes
+   - Include sparingly, as any file that includes git_hash.h will be recompiled anytime
+     the repository changes
 
 ## CPack functionality
 Create Debian, ArchLinux, and archives of the installation.
