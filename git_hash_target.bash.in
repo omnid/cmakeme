@@ -6,7 +6,6 @@
 # Files and directories that do not exist are excluded from the hash
 # (this allows passing sending yyy-NOTFOUND from CMake without issue)
 # If a directory is specified, then all files matching *.h, *.hpp, *.hxx and *.in will be included
-echo "ARGS: $@"
 target=$1
 header=$2
 shift

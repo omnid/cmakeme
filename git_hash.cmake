@@ -36,7 +36,7 @@ function(cmakeme_hash target)
   list(APPEND files ${githash_sources})
 
   add_custom_target(git_hash_${target}
-    COMMAND ${CMAKE_BINARY_DIR}/git_hash_target.bash ${target} ${CMAKE_BINARY_DIR}/${target}_hash.h ${githash_files} ${githash_includes} ${githash_srcdir}/CMakeLists.txt
+    COMMAND ${CMAKE_BINARY_DIR}/git_hash_target.bash ${target} ${CMAKE_BINARY_DIR}/cmakeme/include/cmakeme/${target}_hash.h ${githash_files} ${githash_includes} ${githash_srcdir}/CMakeLists.txt
     COMMENT "Updating ${target}_hash.h"
     BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/cmakeme/include/cmakeme/${target}_hash.h
     VERBATIM
