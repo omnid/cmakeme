@@ -14,7 +14,7 @@ file(COPY ${CMAKE_BINARY_DIR}/tmp/git_hash.bash  ${CMAKE_BINARY_DIR}/tmp/git_has
   )
 
 # add the githash target
-add_custom_target(git_hash ALL
+add_custom_target(git_hash 
   COMMAND ${CMAKE_BINARY_DIR}/git_hash.bash ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/git_hash.h
   COMMENT "Updating git_hash.h"
   BYPRODUCTS ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/git_hash.h
@@ -41,6 +41,7 @@ function(cmakeme_hash target)
     BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${target}_hash.h
     VERBATIM
     )
-  add_dependencies(${target} git_hash_${target} git_hash)
+  add_dependencies(git_hash_${target} git_hash)
+  add_dependencies(${target} git_hash_${target})
   target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/cmakeme/include/>)
 endfunction()
