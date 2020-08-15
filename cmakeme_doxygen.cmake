@@ -5,12 +5,13 @@ if(NOT DOXYGEN_FOUND)
   return()
 endif()
 
-configure_file(Doxyfile.in Doxyfile)
+function(cmakeme_doxygen)
+  configure_file(Doxyfile.in Doxyfile)
 
-add_custom_target(doxygen ALL
-  COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  COMMENT "Generating Doxygen Documentation"
-  VERBATIM)
-
+  add_custom_target(doxygen ALL
+    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Generating Doxygen Documentation"
+    VERBATIM)
+endfunction()
 
