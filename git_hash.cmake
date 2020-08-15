@@ -42,5 +42,5 @@ function(cmakeme_hash target)
     VERBATIM
     )
   add_dependencies(${target} git_hash_${target} git_hash)
-  target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/cmakeme/include/>)
+  target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/cmakeme/include>)
 endfunction()

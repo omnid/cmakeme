@@ -82,10 +82,11 @@ function(cmakeme_install)
       # if the include directory is within the source code we should install it.
       # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
       string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" incdir ${incdir})
-      # then make sure that the include file is from within the project and
+      # then make sure that the include file is from within the project (either the source directory or generated in the build directory) and
       # not something that comes from an external project
-      string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
-      if(starts_with EQUAL 0)
+      string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with_source)
+      string(FIND ${incdir} ${CMAKE_CURRENT_BINARY_DIR} starts_with_bin)
+      if((starts_with_source EQUAL 0) OR (starts_with_bin EQUAL 0))
         # make sure the directory ends with a /
         string(APPEND incdir "/")
         string(REPLACE "//" "/" incdir ${incdir})
