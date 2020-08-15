@@ -40,13 +40,6 @@ moves.  `cmakeme_install` will add the proper paths to the `$<INSTALL_INTERFACE:
 ]]
 
 function(cmakeme_install)
-  if(CMAKE_CROSSCOMPILING)
-    set(libdir ${CMAKE_INSTALL_LIBDIR}/${CMAKE_LIBRARY_ARCHITECTURE})
-    set(bindir ${CMAKE_INSTALL_BINDIR}/${CMAKE_LIBRARY_ARCHITECTURE})
-  else()
-    set(libdir ${CMAKE_INSTALL_LIBDIR})
-    set(binder ${CMAKE_INSTALL_BINDIR})
-  endif()
 
   cmake_parse_arguments(
     CMAKEME
@@ -65,6 +58,15 @@ function(cmakeme_install)
 
   if(NOT DEFINED CMAKEME_PACKAGE_NAME)
     set(CMAKEME_PACKAGE_NAME ${CMAKEME_NAMESPACE})
+  endif()
+
+  # setup architecture specific directories if cross-compiling and there is no architecture-independent code
+  if(CMAKE_CROSSCOMPILING AND (NOT CMAKEME_ARCH_INDEPENDENT))
+    set(libdir ${CMAKE_INSTALL_LIBDIR}/${CMAKE_LIBRARY_ARCHITECTURE})
+    set(bindir ${CMAKE_INSTALL_BINDIR}/${CMAKE_LIBRARY_ARCHITECTURE})
+  else()
+    set(libdir ${CMAKE_INSTALL_LIBDIR})
+    set(binder ${CMAKE_INSTALL_BINDIR})
   endif()
 
   # Automatically find the header files that are included, install them,
