@@ -35,7 +35,7 @@ cat > "$header" <<EOF
 // DO NOT MODIFY.  
 #ifndef ${target^^}_GIT_HASH_INCLUDE_GUARD
 #define ${target^^}_GIT_HASH_INCLUDE_GUARD
-#include "@PROJECT_NAME@/git_hash.h"
+#include "@PROJECT_NAME@/@PROJECT_NAME@_git_hash.h"
 #define GIT_HASH_${target^^} "$hash"
 #endif
 EOF

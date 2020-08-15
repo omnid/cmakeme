@@ -15,9 +15,9 @@ file(COPY ${CMAKE_BINARY_DIR}/tmp/git_hash.bash  ${CMAKE_BINARY_DIR}/tmp/git_has
 
 # add the githash target
 add_custom_target(git_hash ALL
-  COMMAND ${CMAKE_BINARY_DIR}/git_hash.bash ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/git_hash.h
-  COMMENT "Updating git_hash.h"
-  BYPRODUCTS ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/git_hash.h
+  COMMAND ${CMAKE_BINARY_DIR}/git_hash.bash ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${PROJECT_NAME}_git_hash.h
+  COMMENT "Updating ${PROJECT_NAME}_git_hash.h"
+  BYPRODUCTS ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${PROJECT_NAME}_git_hash.h
   VERBATIM
   )
 
