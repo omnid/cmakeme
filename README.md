@@ -86,3 +86,7 @@ cmakeme_package(EMAIL email
                 [ARCHLINUX_RECOMMENDS a1...]
                 )
 ```
+
+## Doxygen
+Call `cmakeme_doxygen()` to build doxygen documentation in build/docs.
+Assumes the existence of `Doxyfile.in` in the base source directory, and that file should set the OUTPUT_DIRECTORY to `@CMAKE_BINARY_DIR@/docs`

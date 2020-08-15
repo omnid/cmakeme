@@ -14,6 +14,7 @@ install(FILES
   cmakeme_defaults.cmake
   cmakeme_install.cmake
   cmakeme_pack.cmake
+  cmakeme_doxygen.cmake
   git_hash.bash.in
   git_hash.cmake
   git_hash_target.bash.in
