@@ -6,6 +6,7 @@
 # outputs to the file [OUTPUT]
 
 # find the top-level directory for the project
+cd @CMAKE_SOURCE_DIR@
 git_dir=$(@GIT_EXECUTABLE@ rev-parse --show-toplevel)/
 
 # get the sha1 of the current HEAD
