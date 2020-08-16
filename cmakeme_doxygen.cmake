@@ -10,7 +10,7 @@ function(cmakeme_doxygen)
 
   add_custom_target(doxygen ALL
     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMENT "Generating Doxygen Documentation"
     VERBATIM)
 endfunction()
