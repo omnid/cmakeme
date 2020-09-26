@@ -24,7 +24,7 @@ cmakeme_install(TARGETS targets...
                 [DEPENDS deps..]
                 )
 * `targets - The targets that should be installed. This is the only option necessary if the targets do not need to be
-             found by other cmake modules.
+             found by other cmake modules. If ${target}.bin is also defined as a target it will be installed as well.
 * `ns`     - Namespace for name. If not specified the targets will not be exported. Do not include the `::` after the namespace.
              Link against the configured targets by passing `ns::target` to `target_link_libraries`
 * `ARCH_INDEPENDENT` - Specify for an architecture-independent library, such as a header-only library.
@@ -109,6 +109,10 @@ function(cmakeme_install)
       endif()
     endforeach()
     get_target_property(mysrc ${target} INTERFACE_SOURCES)
+
+    if(TARGET ${target}.bin)
+      install(PROGRAMS $<TARGET_FILE:${target}>.bin DESTINATION ${bindir})
+    endif()
   endforeach()
 
   
