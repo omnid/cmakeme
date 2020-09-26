@@ -16,7 +16,7 @@ There are three options for installing:
    cmake --build build
    cmake --build build --target install
    ```
-4. See (Installation)[https://github.com/omnid/omnid_docs/blob/master/Installation.md] for more detailed instructions.
+4. See (https://github.com/omnid/omnid_docs/blob/master/Installation.md)[Installation] for more detailed instructions.
    
 # Modules
 To use any of the modules:
