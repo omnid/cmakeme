@@ -29,7 +29,7 @@ cmakeme_defaults(buildtype)
 ```
 Sets up some default settings including:
 1. Disables in-source builds. 
-2. Sets the default build type to `buildtype`
+2. Sets the default build type to `buildtype` (This default is still overridable by specifying `-DCMAKE_BUILD_TYPE=`)
 3. Disables non-standard C and C++ language extensions
 
 ## Install Helpers
@@ -39,7 +39,7 @@ For example,
 ```
 add_executable(target1 file1.c file2.c)
 add_library(lib1 file3.c)
-target_linke_libraries(lib1 PUBLIC dep1)
+target_link_libraries(lib1 PUBLIC dep1)
 target_include_directories(lib1 PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 cmakeme_install(TARGETS target1 lib1 NAMESPACE mylib DEPENDS dep1)
 ```
