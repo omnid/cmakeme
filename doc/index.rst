@@ -6,8 +6,9 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   cmakeme_install
    cmakeme_defaults
+   cmakeme_install
+   cmakeme_pack
    cmakeme_sphinx
    git_hash
 
