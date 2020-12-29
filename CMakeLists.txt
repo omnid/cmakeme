@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
-project(cmakeme LANGUAGES NONE VERSION 0.1.0)
+project(cmakeme LANGUAGES NONE VERSION 0.2.0)
 
+# Since cmakeme is not installed, we load the individual modules manually
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_defaults.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/sphinx/cmakeme_sphinx.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_pack.cmake)
+
+
 cmakeme_defaults(Release)
 option(BUILD_SPHINX "Build the Sphinx Documentation" OFF)
 
@@ -37,5 +41,6 @@ install(FILES
 install(DIRECTORY cpack DESTINATION share/cmakeme)
 install(DIRECTORY sphinx DESTINATION share/cmakeme)
 
+cmakeme_package(EMAIL elwin@northwestern.edu ARCH_ANY)
 enable_testing()
 add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tivacmake")

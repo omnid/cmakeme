@@ -18,14 +18,12 @@ There are three options for installing:
    ```
 4. See [Installation](https://github.com/omnid/omnid_docs/blob/master/Installation.md) for more detailed instructions.
 5. Specify `-DBUILD_SPHINX=On` to build the developer documentation for this package.
-   
-# Modules
+6. Read the [detailed API documentation](https://omnid.github.io/cmakeme).    
+
+# Summary
 To use any of the modules:
 `find_package(cmakeme)`
 
-Detailed API documentation can be found [here](https://omnid.github.io/cmakeme).
-
-A summary of the features is below:
 1. `cmakeme_defaults`: CMake library for setting default options like the build type.
 2. `cmakeme_install`: Simplify cmake library installation for some common scenarios
 3. `git_hash`: Access git hash information from your C and C++ code
