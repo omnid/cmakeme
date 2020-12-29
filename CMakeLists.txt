@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
-project(git_hash LANGUAGES NONE VERSION 0.1.0)
+project(cmakeme LANGUAGES NONE VERSION 0.1.0)
 
 include(CMakePackageConfigHelpers)
 
-set(INSTALL_DIR share/cmakeme)
 configure_package_config_file(cmakeme-config.cmake.in cmakeme-config.cmake
   INSTALL_DESTINATION share/cmakeme
-  PATH_VARS INSTALL_DIR
+  PATH_VARS share/cmakeme
   )
 
 install(FILES
