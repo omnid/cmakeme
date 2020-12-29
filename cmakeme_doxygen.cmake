@@ -35,5 +35,7 @@ function(cmakeme_doxygen display_title)
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         COMMENT "Generating Doxygen Documentation"
         VERBATIM)
+
+    install(DIRECTORY 
 endfunction()
 

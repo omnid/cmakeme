@@ -44,6 +44,7 @@ Commands
             The name of the copyright holder.
 
     The resulting documentation can be found in ``${CMAKE_SOURCE_DIR}/build/html/cmake``
+    It is installed to ``share/${PROJECT_NAME}/doc/html/cmake``
 
 #]=======================================================================]
 function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
