@@ -1,7 +1,7 @@
 .. title:: Cmakeme  Reference Documentation
 
-Introduction
-============
+CMakeMe 
+=======
 A CMake package with utilities for installing executables and libraries,
 setting default compiler flags, accessing git commit hashes and
 hashes of source files at compile time, and generating documentation.
