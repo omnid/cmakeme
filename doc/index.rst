@@ -8,6 +8,7 @@ Contents
 
    cmakeme_install
    cmakeme_defaults
+   cmakeme_sphinx
 
 
 Indices and tables
