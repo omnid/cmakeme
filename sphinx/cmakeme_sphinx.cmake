@@ -71,4 +71,6 @@ function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
         COMMENT "sphinx-build html: see build-html.log"
         VERBATIM
         )
+
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/html/cmake DESTINATION share/${CMAKE_PROJECT_NAME}/doc/html)
 endfunction()
