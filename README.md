@@ -17,6 +17,7 @@ There are three options for installing:
    cmake --build build --target install
    ```
 4. See [Installation](https://github.com/omnid/omnid_docs/blob/master/Installation.md) for more detailed instructions.
+5. Specify `-DBUILD_SPHINX=On` to build the developer documentation for this package.
    
 # Modules
 To use any of the modules:
@@ -35,25 +36,6 @@ Sets up some default settings including:
 ## Install Helpers
 CMake library for helping with some typical installation scenarios, provides the `cmakeme_install` function.
 
-For example, 
-```
-add_executable(target1 file1.c file2.c)
-add_library(lib1 file3.c)
-target_link_libraries(lib1 PUBLIC dep1)
-target_include_directories(lib1 PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
-cmakeme_install(TARGETS target1 lib1 NAMESPACE mylib DEPENDS dep1)
-```
-Once installed the library `lib1` can then be used from another cmake project:
-```
-find_package(mylib)
-...
-target_link_libraries(lib2 PUBLIC mylib::lib1)
-```
-
-The dependency `dep1` is a package-level dependency (i.e., something found with `find_package`)
-
-You can usually use the above code as a guide, but there are more options and features,
-see comments in `cmakeme_install.cmake` for the full documentation.
 
 ## Git Hash
 CMake library for computing git hashes and incorporating them into your code.

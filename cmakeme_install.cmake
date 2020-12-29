@@ -64,9 +64,30 @@ Commands
     .. note::
         Use ``target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>)`` to add include directories 
         and ``target_sources(target INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source1>... )`` to add source files.
-        The ``$<BUILD_INTERFACE:>`` generator expression only adds the items in it during build time.
-        At install time, the location of the files moves.
-        ``cmakeme_install`` will add the proper paths to the ``$<INSTALL_INTERFACE:>`` for use at installation time.
+        The ``$<BUILD_INTERFACE:>`` generator expression only adds the items in it during build time since the install location is different.
+        At install time, typically you would specify an install location with ``$<INSTALL_INTERFACE:>``; however ``cmakeme_install``
+        automatically computes the install destination based on the ``BUILD_INTERFACE`` values.
+
+Example
+^^^^^^^
+
+Basic usage for installing a library and executable:
+
+.. code-block:: cmake
+
+    add_executable(target1 file1.c file2.c)
+    add_library(lib1 file3.c)
+    target_link_libraries(lib1 PUBLIC dep1)
+    target_include_directories(lib1 PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+    cmakeme_install(TARGETS target1 lib1 NAMESPACE mylib DEPENDS dep1)
+
+Once installed the library `lib1` can then be used from another cmake project:
+
+.. code-block:: cmake
+
+    find_package(mylib)
+    target_link_libraries(lib2 PUBLIC mylib::lib1)
+
 #]=======================================================================]
 
 function(cmakeme_install)

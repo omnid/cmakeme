@@ -17,8 +17,9 @@ Call ``cmakeme_doxygen()`` to build doxygen documentation using the ``cmakeme`` 
     
     cmakeme_doxygen(display_title)
 
-    ``display_title``
-    The title of the project, to be displayed in the Doxygen documentation
+``display_title``
+
+The title of the project, to be displayed in the Doxygen documentation
 #]=======================================================================]
 function(cmakeme_doxygen display_title)
     # Build doxygen
