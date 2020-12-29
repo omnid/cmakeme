@@ -13,6 +13,8 @@ master_doc = 'index'
 
 project = '@CMAKE_PROJECT_NAME@'
 version = '@CMAKE_PROJECT_VERSION@'
+
+
 pygments_style = 'colors.CMakeTemplateStyle'
 
 language = 'en'
@@ -55,3 +57,8 @@ html_theme_options = {
 html_title = '%s %s' % (project, version)
 html_short_title = '%s' % project
 html_favicon = '@CMAKEME_ROOT_DIR@/sphinx/static/cmake-favicon.ico'
+
+html_context = {
+        'organization' : '@conf_organization@',
+        'homepage'     : '@conf_homepage@'
+        }
