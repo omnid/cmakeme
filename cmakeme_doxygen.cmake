@@ -15,28 +15,32 @@ Call ``cmakeme_doxygen()`` to build doxygen documentation using the ``cmakeme`` 
 
 .. code-block:: cmake
     
-    cmakeme_doxygen(display_title)
+    cmakeme_doxygen(filesOrDirs...)
 
-``display_title``
+``filesOrDirs``
+The files and directories to search for files to parse with doxygen.
 
-The title of the project, to be displayed in the Doxygen documentation
+This uses the built-in doxygen_add_docs  https://cmake.org/cmake/help/latest/module/FindDoxygen.html
+under the hood, but changes some default settings and add an installation target. You can
+override any doxygen settings using the method specified therein. It also installs the documentation
+that is generated.
+
 #]=======================================================================]
-function(cmakeme_doxygen display_title)
-    # Build doxygen
-    find_package(Doxygen)
+function(cmakeme_doxygen filesOrDirs)
+    find_package(Doxygen OPTIONAL_COMPONENTS dot mscgen dia)
     if(NOT DOXYGEN_FOUND)
         message(WARNING "Doxygen not found, skipping documentation")
         return()
     endif()
-    set(conf_project_title ${display_title})
-    configure_file(${CMAKEME_ROOT_DIR}/Doxyfile.in Doxyfile)
 
-    add_custom_target(doxygen ALL
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Generating Doxygen Documentation"
-        VERBATIM)
+    if(NOT EXISTS DOXYGEN_USE_MDFILE_AS_MAINPAGE)
+        set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
+    endif()
+  
+    option(BUILD_DOXYGEN "Build the doxygen documentation automatically" ON)
 
-    install(DIRECTORY ${CMAKE_BINARY_DIR}/docs/doxygen DESTINATION share/${CMAKE_PROJECT_NAME}/docs)
+    doxygen_add_docs(doxygen ${filesOrDirs} ALL)
+
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/html DESTINATION share/${CMAKE_PROJECT_NAME}/docs)
 endfunction()
 
