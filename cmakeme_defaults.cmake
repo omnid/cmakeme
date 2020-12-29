@@ -2,6 +2,9 @@
 cmakeme_defaults
 ----------------
 Basic helper functions providing some useful generic cmake features
+
+Use this module with ``find_package(cmakeme)``
+
 #]=======================================================================]
 
 #[=======================================================================[.rst:

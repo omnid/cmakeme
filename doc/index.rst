@@ -9,6 +9,7 @@ Contents
    cmakeme_install
    cmakeme_defaults
    cmakeme_sphinx
+   git_hash
 
 
 Indices and tables

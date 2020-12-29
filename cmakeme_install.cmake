@@ -2,6 +2,9 @@
 cmakeme_install
 ---------------
 Helper function for typical cmake installation scenarios.
+
+Use this module with ``find_package(cmakeme)``
+
 #]=======================================================================]
 
 # fake a language being enabled if it was not to supress warnings from GNUInstallDirs

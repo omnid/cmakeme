@@ -1,3 +1,31 @@
+#[=======================================================================[.rst:
+git_hash
+--------
+
+    Generate git hashes for project source code and access them via constants
+    defined in header files. You can retrieve the SHA1 hash that git uses for the 
+    current commit, the SHA1 hash of any subset of files, and the current commit status
+    (dirty or clean).
+
+Usage
+^^^^^
+This module is included with ``find_package(cmakeme)`` and will automatically
+generate a header file called ``${PROJECT_NAME}_git_hash.h``.
+
+To use from your project (called ``myprojecct``)
+
+.. code-block:: cpp
+    
+    #include"myproject/myproject_git_hash.h"
+    // my_project_git_hash.h provides the following defines:
+    #define GIT_HASH_HEAD  // The SHA1 hash of the HEAD of the git repository
+    #define GIT_HASH_DIRTY // True if there are tracked files that have not been committed
+
+.. note::
+
+    Use ``${PROJECT_NAME}_git_hash.h`` sparingly because every file that includes it is recompiled
+    every build.
+#]=======================================================================]
 find_package(Git REQUIRED)
 
 # configure files to temporary directory so they cna be copied and given execute permissions
@@ -21,7 +49,35 @@ add_custom_target(git_hash ALL
   VERBATIM
   )
 
-# Create target_hash.h which contains hashes of the current git repository and the target's dependencies
+#[=======================================================================[.rst:
+Commands
+^^^^^^^^
+
+.. command:: cmakeme_hash
+
+The ``cmakeme_hash(target)`` function hashes the files used for the specified target and its dependencies
+
+.. code-block:: cmake
+
+  cmakeme_hash(target)
+
+``target`` The name of the target to hash.  The hash is the SHA1 hash of all the source files for the target and its dependencies.
+
+For example, if the project name is ``myproject`` and the target name is ``mytarget``, 
+
+.. code-block:: c
+
+    #include"myproject/mytarget_git_hash.h"
+    // The above incldue does the following
+    #include"myproject/myproject_git_hash.h" // git hashes for the overall project
+    #define GIT_HASH_mytarget // git hash for the specified target
+
+.. note::
+
+  Include sparingly, as any file that includes the header file is recompiled every time you build.
+#]=======================================================================]
+
+
 function(cmakeme_hash target)
   get_target_property(githash_libs ${target} LINK_LIBRARIES)
   get_target_property(githash_sources ${target} SOURCES)

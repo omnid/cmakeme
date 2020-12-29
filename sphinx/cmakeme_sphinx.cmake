@@ -10,6 +10,8 @@ cmakeme_sphinx
     generating its own documentation in CMake's ``Utilties/Sphinx`` directory
     but can be customized/used by any cmake project.
 
+    Use this module with ``find_package(cmakeme)``
+    
 #]=======================================================================]
 
 #[=======================================================================[.rst:
