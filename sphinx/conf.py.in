@@ -11,7 +11,7 @@ sys.path.insert(0, r'@CMAKEME_ROOT_DIR@/sphinx')
 source_suffix = '.rst'
 master_doc = 'index'
 
-project = '@CMAKE_PROJECT@'
+project = '@CMAKE_PROJECT_NAME@'
 version = '@CMAKE_PROJECT_VERSION@'
 pygments_style = 'colors.CMakeTemplateStyle'
 
@@ -52,6 +52,6 @@ html_theme_options = {
     'codebgcolor':      '#eeeeee',
     'codetextcolor':    '#333333',
 }
-html_title = '%s %s Documentation' % (project, version)
+html_title = '%s %s' % (project, version)
 html_short_title = '%s' % project
 html_favicon = '@CMAKEME_ROOT_DIR@/sphinx/static/cmake-favicon.ico'
