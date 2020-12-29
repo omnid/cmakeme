@@ -53,14 +53,15 @@ function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
         )
 
     if(NOT SPHINX_EXECUTABLE)
-        message(FATAL_ERROR "SPHINX_EXECUTABLE (sphinx-build) is not found!")
+        message(WARNING "SPHINX_EXECUTABLE (sphinx-build) is not found, skipping CMAke documentation")
+        return()
     endif()
     set(conf_homepage ${org_url})
     set(conf_organization ${orgname})
     set(conf_copyright ${copyright})
     configure_file(${CMAKEME_ROOT_DIR}/sphinx/conf.py.in sphinx/conf.py)
 
-    add_custom_command(OUTPUT html
+    add_custom_target(cmake_docs ALL
         COMMAND ${SPHINX_EXECUTABLE}
         -b html
         -c ${CMAKE_BINARY_DIR}/sphinx
@@ -70,5 +71,4 @@ function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
         COMMENT "sphinx-build html: see build-html.log"
         VERBATIM
         )
-  add_custom_target(cmake_docs ALL DEPENDS html)
 endfunction()
