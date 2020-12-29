@@ -2,7 +2,8 @@
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   cmakeme_install
+   cmakeme_defaults
 
 
 Indices and tables

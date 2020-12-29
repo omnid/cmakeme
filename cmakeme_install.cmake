@@ -1,7 +1,7 @@
 #[=======================================================================[.rst:
 cmakeme_install
 ---------------
-Install a cmake target-specific library to the proper directories
+Helper function for typical cmake installation scenarios.
 #]=======================================================================]
 
 # fake a language being enabled if it was not to supress warnings from GNUInstallDirs
@@ -21,6 +21,8 @@ endif()
 Commands
 ^^^^^^^^
 
+.. command:: cmakeme_install
+
     The ``cmakeme_install()`` function installs the specified targets along
     with any include files in ``INTERFACE_INCLUDE_DIRECTORIES`` or source files 
     in ``INTERFACE_SOURCES``. If the target is a library it will be setup to be
@@ -35,12 +37,33 @@ Commands
                 [DEPENDS deps..]
                 )
 
-    * `targets` - The targets that should be installed.  This is the only option necessary if the targets do not need to be found by other cmake modules.  If target.bin is also defined as a target it will be installed as well.
-    * `ns`     - Namespace for name. If not specified the targets will not be exported. Do not include the `::` after the namespace.  Link against the configured targets by passing `ns::target` to `target_link_libraries`
-    * `ARCH_INDEPENDENT` - Specify for an architecture-independent library, such as a header-only library.
-    * `name` - The name of the package, as used by `find_package`. So the package will be imported via `find_package(name)` defaults to the value of `ns`
-    * `deps` - The dependencies of the listed targets that should be found when `find_package(name)` is called In other words, imported dependencies that are required for using the target
-    * Use `target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>) to add include directories and `target_sources(target INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source1>... )` to add source files.  The `$<BUILD_INTERFACE:>` generator expression only adds the items in it during build time.  At install time, the location of the files moves.  `cmakeme_install` will add the proper paths to the `$<INSTALL_INTERFACE:>` for use at installation time.
+    ``TARGETS targets`` 
+    The targets that should be installed.
+    This is the only option necessary if the targets do not need to be found by other cmake modules.
+    If target.bin is also defined as a target it will be installed as well.
+
+    ``NAMESPACE ns`` 
+    Namespace for name.
+    If not specified the targets will not be exported.
+    Do not include the `::` after the namespace.  
+    Link against the configured targets by passing `ns::target` to `target_link_libraries`
+    
+    ``ARCH_INDEPENDENT``
+    Specify for an architecture-independent library, such as a header-only library.
+
+    ``PACKAGE_NAME name`` 
+    The name of the package, as used by `find_package`. So the package will be imported via `find_package(name)` defaults to the value of `ns`
+
+    ``DEPENDS deps``:w
+    The dependencies of the listed targets that should be found when `find_package(name)` is called.
+    In other words, imported dependencies that are required for using the target
+
+    .. note::
+        Use ``target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>)`` to add include directories 
+        and ``target_sources(target INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source1>... )`` to add source files.
+        The ``$<BUILD_INTERFACE:>`j` generator expression only adds the items in it during build time.
+        At install time, the location of the files moves.
+        ``cmakeme_install`` will add the proper paths to the ``$<INSTALL_INTERFACE:>`` for use at installation time.
 #]=======================================================================]
 
 function(cmakeme_install)

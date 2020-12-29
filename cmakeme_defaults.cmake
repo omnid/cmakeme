@@ -1,5 +1,26 @@
-# Default cmake settings and options.
-# type - the default release type, None Debug Release RelWithDebInfo MinSizeRel
+#[=======================================================================[.rst:
+cmakeme_defaults
+----------------
+Basic helper functions providing some useful generic cmake features
+#]=======================================================================]
+
+#[=======================================================================[.rst:
+Commands
+^^^^^^^^
+    .. command:: cmakeme_defaults
+
+    Sets up all of the default settings from cmakeme:
+    1. Sets a default build type (single-configuration generators, and is user-overridable with ``-DCMAKE_BUILD_TYPE=``)
+    2. Disables in-source builds (prevent accidentally polluting the source space)
+    3. Disables language extensions
+
+    .. code-block:: cmake
+
+        cmakeme_defaults(type)
+
+    ``type``
+    The build type to set as the default type (Release, Debug, RelWithDebInfo, MinSizeRel, or "")
+#]=======================================================================]
 macro(cmakeme_defaults type)
   cmakeme_disable_in_source_builds()
   cmakeme_set_default_build_type(${type})
