@@ -4,7 +4,7 @@ project(cmakeme LANGUAGES NONE VERSION 0.1.0)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_defaults.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/sphinx/cmakeme_sphinx.cmake)
 cmakeme_defaults(Release)
-option(BUILD_SPHINX "Build the Sphinx Documentation" OFF)
+option(BUILD_SPHINX "Build the Sphinx Documentation" ON)
 
 include(CMakePackageConfigHelpers)
 
