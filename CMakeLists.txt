@@ -17,7 +17,7 @@ configure_package_config_file(cmakeme-config.cmake.in cmakeme-config.cmake
 set(CMAKEME_ROOT_DIR ${CMAKE_SOURCE_DIR})
 
 if(BUILD_SPHINX)
-    cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid https://omnid.github.io/)
+    cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid https://omnid.github.io/ "2021 by Matthew Elwin")
 endif()
 
 install(FILES

@@ -4,7 +4,7 @@
 # create sphinx documentation for the cmake files
 # CMAKEME_DOC_DIR - documentation for sphinx.  
 # Outputs the resulting documentation to build/html/cmake
-function(cmakeme_sphinx_cmake doc_dir orgname org_url)
+function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
     find_program(SPHINX_EXECUTABLE
         NAMES sphinx-build
         DOC "Sphinx Documentation Builder (sphinx-doc.org)"
@@ -15,6 +15,7 @@ function(cmakeme_sphinx_cmake doc_dir orgname org_url)
     endif()
     set(conf_homepage ${org_url})
     set(conf_organization ${orgname})
+    set(conf_copyright ${copyright})
     configure_file(${CMAKEME_ROOT_DIR}/sphinx/conf.py.in sphinx/conf.py)
 
     add_custom_command(OUTPUT html
