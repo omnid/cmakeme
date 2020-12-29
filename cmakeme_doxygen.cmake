@@ -36,6 +36,6 @@ function(cmakeme_doxygen display_title)
         COMMENT "Generating Doxygen Documentation"
         VERBATIM)
 
-    install(DIRECTORY 
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/docs/doxygen DESTINATION share/${CMAKE_PROJECT_NAME}/docs)
 endfunction()
 
