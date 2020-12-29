@@ -16,12 +16,13 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   cmakeme_config
-   cmakeme_defaults
-   cmakeme_install
-   cmakeme_pack
-   cmakeme_sphinx
-   git_hash
+   cmakeme_config (Configure the cmakeme package) <cmakeme_config>
+   cmakeme_defaults (Default settings) <cmakeme_defaults>
+   cmakeme_doxygen (Generate Doxygen Documentation) <cmakeme_doxygen>
+   cmakeme_install (Simplify Library installation) <cmakeme_install>
+   cmakeme_pack    (Create Installation Packages) <cmakeme_pack>
+   cmakeme_sphinx  (Generate Sphinx Documentation for CMake) <cmakeme_sphinx>
+   git_hash        (Access git hashes at compile time) <git_hash>
 
 
 Indices and tables

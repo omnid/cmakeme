@@ -30,6 +30,7 @@ install(FILES
   git_hash.cmake
   git_hash_target.bash.in
   sphinx/cmakeme_sphinx.cmake
+  Doxyfile.in
   DESTINATION share/cmakeme
   )
 
