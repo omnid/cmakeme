@@ -23,23 +23,12 @@ There are three options for installing:
 To use any of the modules:
 `find_package(cmakeme)`
 
-The modules are documented in more detail the generated sphinx [documentation](https://omnid.github.io/cmakeme)
-and summarized below:
+Detailed API documentation can be found [here](https://omnid.github.io/cmakeme).
 
-## CMake Defaults
-CMake library for setting some options and defaults 
-
-## Install Helpers
-CMake library for helping with some typical installation scenarios, provides the `cmakeme_install` function.
-
-## Git Hash
-CMake library for computing git hashes and incorporating them into your code.
-
-## CPack Helpers
-Create Debian, ArchLinux, and archives of the installation.
-
-## Doxygen
-Build doxygen documentation with minimal setup
-
-## Sphinx CMake
-Document CMake files with sphinx.
+A summary of the features is below:
+1. `cmakeme_defaults`: CMake library for setting default options like the build type.
+2. `cmakeme_install`: Simplify cmake library installation for some common scenarios
+3. `git_hash`: Access git hash information from your C and C++ code
+4. `cmakeme_cpack`: Create binary installers for debian, archlinux, and other platforms
+5. `cmakeme_doxygen`: Simplify doxygen use by providing common default options
+6. `sphinx_cmake`: Create official-looking CMake documentation using sphinx.
