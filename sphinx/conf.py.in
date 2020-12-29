@@ -6,7 +6,7 @@ import os
 import re
 import glob
 
-sys.path.insert(0, r'@CMAKEME_ROOT_DIR@/sphinx'
+sys.path.insert(0, r'@CMAKEME_ROOT_DIR@/sphinx')
 
 source_suffix = '.rst'
 master_doc = 'index'
@@ -54,4 +54,4 @@ html_theme_options = {
 }
 html_title = '%s %s Documentation' % (project, version)
 html_short_title = '%s' % project
-html_favicon = '@CMAKEME_ROOT_DIR@/sphinx/cmake-favicon.ico'
+html_favicon = '@CMAKEME_ROOT_DIR@/sphinx/static/cmake-favicon.ico'

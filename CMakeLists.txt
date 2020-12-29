@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
 project(cmakeme LANGUAGES NONE VERSION 0.1.0)
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_defaults.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/sphinx/cmakeme_sphinx.cmake)
 cmakeme_defaults(Release)
+option(BUILD_SPHINX "Build the Sphinx Documentation" OFF)
 
 include(CMakePackageConfigHelpers)
 
@@ -10,6 +13,12 @@ configure_package_config_file(cmakeme-config.cmake.in cmakeme-config.cmake
   INSTALL_DESTINATION share/cmakeme
   PATH_VARS INSTALL_DIR
   )
+
+set(CMAKEME_ROOT_DIR ${CMAKE_SOURCE_DIR})
+
+if(BUILD_SPHINX)
+    cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc)
+endif()
 
 install(FILES
   ${CMAKE_BINARY_DIR}/cmakeme-config.cmake #generated file
