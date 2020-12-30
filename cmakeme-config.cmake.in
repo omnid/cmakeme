@@ -5,3 +5,23 @@ include(${CMAKEME_ROOT_DIR}/cmakeme_install.cmake)
 include(${CMAKEME_ROOT_DIR}/git_hash.cmake)
 include(${CMAKEME_ROOT_DIR}/cmakeme_pack.cmake)
 include(${CMAKEME_ROOT_DIR}/cmakeme_doxygen.cmake)
+
+
+# Add useful compiler options here, for each system.  This is anything beyond the necessary ones defined in the platform files
+# target_compile_features don't seem to be working currently for C so I am adding the flags explicitly here.
+add_library(cmakeme_flags INTERFACE)
+target_compile_options(cmakeme_flags INTERFACE
+  $<$<C_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra >    
+  $<$<CXX_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra>    
+  $<$<C_COMPILER_ID:TI>:-pden -pdr -pdv --c99 --diag_suppress=270>
+  )
+# Detect the enabled languages
+get_property(ENABLED_LANGS GLOBAL  PROPERTY ENABLED_LANGUAGES)
+
+if ("C" IN_LIST ENABLED_LANGS)
+    target_compile_features(cmakeme_flags INTERFACE c_std_99)
+endif()
+
+if ("CXX" IN_LIST ENABLED_LANGS)
+    target_compile_features(cmakeme_flags INTERFACE cxx_std_17)
+endif()
