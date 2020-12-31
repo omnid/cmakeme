@@ -9,6 +9,7 @@
   <url type="repository">https://www.github.com/omnid/cmakeme</url>
   <author email="elwin@u.northwestern.edu">Matthew Elwin></author>
   <build_depend>git</build_depend>
+  <doc_depend>sphinx</doc_depend>
   <export>
     <build_type>cmake</build_type>
   </export>
