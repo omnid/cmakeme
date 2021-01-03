@@ -26,3 +26,5 @@ endif()
 if ("CXX" IN_LIST ENABLED_LANGS)
     target_compile_features(cmakeme_flags INTERFACE cxx_std_17)
 endif()
+
+cmakeme_installdirs()

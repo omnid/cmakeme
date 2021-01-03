@@ -7,19 +7,6 @@ Use this module with ``find_package(cmakeme)``
 
 #]=======================================================================]
 
-# fake a language being enabled if it was not to supress warnings from GNUInstallDirs
-# This is a hack, but it is possible to want to know install directories without actually
-# compiling anything
-if(NOT DEFINED CMAKE_SYSTEM_NAME OR NOT DEFINED CMAKE_SIZEOF_VOID_P)
-  set(CMAKE_SYSTEM_NAME ${CMAKE_HOST_SYSTEM_NAME})
-  set(CMAKE_SIZEOF_VOID_P 8)
-  include(GNUInstallDirs)
-  unset(CMAKE_SYSTEM_NAME)
-  unset(CMAKE_SIZEOF_VOID_P)
-else()
-  include(GNUInstallDirs)
-endif()
-
 #[=======================================================================[.rst:
 Commands
 ^^^^^^^^
@@ -67,6 +54,22 @@ Commands
         The ``$<BUILD_INTERFACE:>`` generator expression only adds the items in it during build time since the install location is different.
         At install time, typically you would specify an install location with ``$<INSTALL_INTERFACE:>``; however ``cmakeme_install``
         automatically computes the install destination based on the ``BUILD_INTERFACE`` values.
+
+
+Results Variables
+~~~~~~~~~~~~~~~~~
+
+When calling ``find_package(name)`` for a package installed with ``cmakeme_install`` the following variables will be defined
+
+.. variable:: ${PACKAGE_NAME}_DOCDIR
+
+The directory containing the package's documentation (if built)
+    
+The root directory for the package
+
+.. variable:: ${PACKAGE_NAME}_FOUND
+
+A variable indicating that the package was found
 
 Example
 ^^^^^^^
@@ -205,7 +208,11 @@ function(cmakeme_install)
        include(CMakeFindDependencyMacro)\n")
     file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
         "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKEME_PACKAGE_NAME}-targets.cmake)\n")
-
+    file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
+        "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKEME_PACKAGE_NAME}-targets.cmake)\n")
+    file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
+        "set(${CMAKEME_PACKAGE_NAME}_DOCDIR ${CMAKE_INSTALL_DOCDIR})\n")
+    
     foreach(dep ${CMAKEME_DEPENDS})
       file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
         "find_dependency(${dep})\n")
@@ -222,5 +229,30 @@ function(cmakeme_install)
       ${CMAKE_CURRENT_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config-version.cmake
       DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME})
   endif()
-
 endfunction()
+
+#[=======================================================================[.rst:
+.. command:: cmakeme_installdirs
+    
+The ``cmakeme_installdirs`` macro sets up GNUInstallDirs variables, even if no language is enabled.
+This is called directly when you ``find_package(cmakeme)`` so usually this does not need to be called explicitly
+
+    .. code-block:: cmake
+
+      cmakeme_installdirs()
+#]=======================================================================]
+    
+# fake a language being enabled if it was not to supress warnings from GNUInstallDirs
+# This is a hack, but it is possible to want to know install directories without actually
+# compiling anything
+macro(cmakeme_installdirs)
+    if(NOT DEFINED CMAKE_SYSTEM_NAME OR NOT DEFINED CMAKE_SIZEOF_VOID_P)
+        set(CMAKE_SYSTEM_NAME ${CMAKE_HOST_SYSTEM_NAME})
+        set(CMAKE_SIZEOF_VOID_P 8)
+        include(GNUInstallDirs)
+        unset(CMAKE_SYSTEM_NAME)
+        unset(CMAKE_SIZEOF_VOID_P)
+    else()
+        include(GNUInstallDirs)
+    endif()
+endmacro()

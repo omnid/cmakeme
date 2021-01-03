@@ -47,7 +47,7 @@ function(cmakeme_doxygen filesOrDirs)
       
 
             doxygen_add_docs(doxygen ${filesOrDirs} ALL)
-            install(DIRECTORY ${CMAKE_BINARY_DIR}/html DESTINATION share/${CMAKE_PROJECT_NAME}/docs)
+            install(DIRECTORY ${CMAKE_BINARY_DIR}/html DESTINATION ${CMAKE_INSTALL_DOCDIR})
     endif()
 
 endfunction()

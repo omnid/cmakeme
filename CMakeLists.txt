@@ -5,7 +5,8 @@ project(cmakeme LANGUAGES NONE VERSION 0.2.0)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_defaults.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/sphinx/cmakeme_sphinx.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_pack.cmake)
-
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_install.cmake)
+cmakeme_installdirs()
 
 cmakeme_defaults(Release)
 
@@ -13,7 +14,7 @@ include(CMakePackageConfigHelpers)
 
 set(INSTALL_DIR share/cmakeme)
 configure_package_config_file(cmakeme-config.cmake.in cmakeme-config.cmake
-  INSTALL_DESTINATION share/cmakeme
+    INSTALL_DESTINATION ${CMAKE_INSTALL_DATADIR}/cmakeme
   PATH_VARS INSTALL_DIR
   )
 
