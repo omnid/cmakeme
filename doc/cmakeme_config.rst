@@ -1,20 +1,21 @@
 cmakeme_config
 --------------
 
-Find cmakeme. This module is called when using ``find_package(cmakeme)``.
-It brings in all of the ``cmakeme`` modules.
+Find cmakeme. This module is called when using ``find_package(cmakeme)``.  It brings in the other ``cmakeme`` modules.
 
 Libraries
 ^^^^^^^^^
+.. variable:: cmakeme_flags 
 
-``cmakeme_flags`` 
-  Interface library containing compile flags with options that enable many compiler warnings, C++17, and C99 (for gcc, clang and TI compilers).
+Interface library containing compile flags with options that enable many compiler warnings, C++17, and C99 (for gcc, clang and TI compilers).
 
 Result Variables
 ^^^^^^^^^^^^^^^^
 
-``cmakeme_FOUND``
-  True if cmakeme is found
+.. variable:: cmakeme_FOUND
 
-``CMAKEME_ROOT_DIR``
-  Base directory of the cmakeme package
+True if cmakeme is found
+
+.. variable:: CMAKEME_ROOT_DIR
+
+Base directory of the cmakeme package

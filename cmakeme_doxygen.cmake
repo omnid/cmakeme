@@ -7,6 +7,12 @@ Use this module with ``find_package(cmakeme)``
 #]=======================================================================]
 
 #[=======================================================================[.rst:
+Variables
+^^^^^^^^^
+.. variable:: BUILD_DOXYGEN
+
+Default (``OFF``) set to (``ON``) to build the doxygen documentation when calling ``cmakeme_doxygen``
+
 Commands
 ^^^^^^^^
 .. command:: cmakeme_doxygen
@@ -26,21 +32,23 @@ override any doxygen settings using the method specified therein. It also instal
 that is generated.
 
 #]=======================================================================]
+option(BUILD_DOXYGEN "Build the doxygen documentation automatically" OFF)
 function(cmakeme_doxygen filesOrDirs)
-    find_package(Doxygen OPTIONAL_COMPONENTS dot mscgen dia)
-    if(NOT DOXYGEN_FOUND)
-        message(WARNING "Doxygen not found, skipping documentation")
-        return()
+    if(BUILD_DOXYGEN)
+        find_package(Doxygen OPTIONAL_COMPONENTS dot mscgen dia)
+        if(NOT DOXYGEN_FOUND)
+            message(WARNING "Doxygen not found, skipping documentation")
+            return()
+        endif()
+
+        if(NOT EXISTS DOXYGEN_USE_MDFILE_AS_MAINPAGE)
+            set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
+        endif()
+      
+
+            doxygen_add_docs(doxygen ${filesOrDirs} ALL)
+            install(DIRECTORY ${CMAKE_BINARY_DIR}/html DESTINATION share/${CMAKE_PROJECT_NAME}/docs)
     endif()
 
-    if(NOT EXISTS DOXYGEN_USE_MDFILE_AS_MAINPAGE)
-        set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
-    endif()
-  
-    option(BUILD_DOXYGEN "Build the doxygen documentation automatically" ON)
-
-    doxygen_add_docs(doxygen ${filesOrDirs} ALL)
-
-    install(DIRECTORY ${CMAKE_BINARY_DIR}/html DESTINATION share/${CMAKE_PROJECT_NAME}/docs)
 endfunction()
 

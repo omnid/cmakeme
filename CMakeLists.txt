@@ -8,7 +8,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_pack.cmake)
 
 
 cmakeme_defaults(Release)
-option(BUILD_SPHINX "Build the Sphinx Documentation" OFF)
 
 include(CMakePackageConfigHelpers)
 
@@ -20,9 +19,7 @@ configure_package_config_file(cmakeme-config.cmake.in cmakeme-config.cmake
 
 set(CMAKEME_ROOT_DIR ${CMAKE_SOURCE_DIR})
 
-if(BUILD_SPHINX)
-    cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid https://omnid.github.io/ "2021 by Matthew Elwin")
-endif()
+cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid https://omnid.github.io/ "2021 by Matthew Elwin")
 
 install(FILES
   ${CMAKE_BINARY_DIR}/cmakeme-config.cmake #generated file
@@ -34,7 +31,6 @@ install(FILES
   git_hash.cmake
   git_hash_target.bash.in
   sphinx/cmakeme_sphinx.cmake
-  Doxyfile.in
   DESTINATION share/cmakeme
   )
 
@@ -45,3 +41,4 @@ cmakeme_package(EMAIL elwin@northwestern.edu ARCH_ANY)
 enable_testing()
 add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tivacmake")
 
+add_custom_target(doxygen COMMAND echo "No doxygen documentation for this package")
