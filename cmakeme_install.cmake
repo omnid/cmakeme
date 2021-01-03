@@ -61,12 +61,6 @@ Results Variables
 
 When calling ``find_package(name)`` for a package installed with ``cmakeme_install`` the following variables will be defined
 
-.. variable:: ${PACKAGE_NAME}_DOCDIR
-
-The directory containing the package's documentation (if built)
-    
-The root directory for the package
-
 .. variable:: ${PACKAGE_NAME}_FOUND
 
 A variable indicating that the package was found
@@ -210,8 +204,6 @@ function(cmakeme_install)
         "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKEME_PACKAGE_NAME}-targets.cmake)\n")
     file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
         "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKEME_PACKAGE_NAME}-targets.cmake)\n")
-    file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
-        "set(${CMAKEME_PACKAGE_NAME}_DOCDIR ${CMAKE_INSTALL_DOCDIR})\n")
     
     foreach(dep ${CMAKEME_DEPENDS})
       file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in

@@ -9,6 +9,12 @@ Libraries
 
 Interface library containing compile flags with options that enable many compiler warnings, C++17, and C99 (for gcc, clang and TI compilers).
 
+Configuration Variables
+^^^^^^^^^^^^^^^^^^^^^^^
+.. variable:: BUILD_DOCS
+
+Default (``OFF``) set to (``ON``) to build all the documentation for a cmakeme project
+
 Result Variables
 ^^^^^^^^^^^^^^^^
 
@@ -19,3 +25,5 @@ True if cmakeme is found
 .. variable:: CMAKEME_ROOT_DIR
 
 Base directory of the cmakeme package
+
+#[=======================================================================[.rst:

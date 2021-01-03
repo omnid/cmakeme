@@ -8,18 +8,6 @@ Use this module with ``find_package(cmakeme)``
 #]=======================================================================]
 
 
-#[=======================================================================[.rst:
-Variables
-^^^^^^^^^
-.. variable:: BUILD_DOCS
-
-Default (``OFF``) set to (``ON``) to build all the documentation for a cmakeme project
-#]=======================================================================]
-option(BUILD_DOCS "Build all of the documentation generated using cmakeme" OFF)
-if(BUILD_DOCS)
-    set(BUILD_DOXYGEN ON CACHE BOOL "Overriden by BUILD_DOCS" FORCE)
-    set(BUILD_SPHINX_CMAKE ON CACHE BOOL "Overriden by BUILD_DOCS" FORCE)
-endif()
 
 
 #[=======================================================================[.rst:

@@ -28,3 +28,10 @@ if ("CXX" IN_LIST ENABLED_LANGS)
 endif()
 
 cmakeme_installdirs()
+
+
+option(BUILD_DOCS "Build all of the documentation generated using cmakeme" OFF)
+if(BUILD_DOCS)
+    set(BUILD_DOXYGEN ON CACHE BOOL "Overriden by BUILD_DOCS" FORCE)
+    set(BUILD_SPHINX_CMAKE ON CACHE BOOL "Overriden by BUILD_DOCS" FORCE)
+endif()
