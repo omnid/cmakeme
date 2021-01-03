@@ -44,3 +44,4 @@ install(DIRECTORY sphinx DESTINATION share/cmakeme)
 cmakeme_package(EMAIL elwin@northwestern.edu ARCH_ANY)
 enable_testing()
 add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tivacmake")
+

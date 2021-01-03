@@ -7,9 +7,10 @@ include(${CMAKEME_ROOT_DIR}/cmakeme_pack.cmake)
 include(${CMAKEME_ROOT_DIR}/cmakeme_doxygen.cmake)
 
 
-# Add useful compiler options here, for each system.  This is anything beyond the necessary ones defined in the platform files
-# target_compile_features don't seem to be working currently for C so I am adding the flags explicitly here.
-add_library(cmakeme_flags INTERFACE)
+# Add useful default compiler options here, for each system.  Users can opt-in to these
+# We treat the target as IMPORTED so that a new copy of the library is not actually created
+# and therefore the user is not responsible for installing it
+add_library(cmakeme_flags INTERFACE IMPORTED)
 target_compile_options(cmakeme_flags INTERFACE
   $<$<C_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra >    
   $<$<CXX_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra>    
