@@ -20,7 +20,7 @@ configure_package_config_file(cmakeme-config.cmake.in cmakeme-config.cmake
 
 set(CMAKEME_ROOT_DIR ${CMAKE_SOURCE_DIR})
 
-cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid https://omnid.github.io/ "2021 by Matthew Elwin")
+cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid ../../omnid/cxx/index.html "2021 by Matthew Elwin")
 
 install(FILES
   ${CMAKE_BINARY_DIR}/cmakeme-config.cmake #generated file
