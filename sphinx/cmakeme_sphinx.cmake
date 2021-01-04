@@ -76,7 +76,7 @@ function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
             VERBATIM
             )
 
-        install(DIRECTORY ${CMAKE_BINARY_DIR}/html/cmake/ DESTINATION ${CMAKE_INSTALL_DOCDIR})
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/html/cmake/ DESTINATION ${CMAKE_INSTALL_DOCDIR}/cmake)
 
     endif()
 endfunction()
