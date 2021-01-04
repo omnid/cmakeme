@@ -47,7 +47,14 @@ function(cmakeme_doxygen filesOrDirs)
             set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
         endif()
 
-        doxygen_add_docs(doxygen ${filesOrDirs} ALL)
+        # Catkin defines a doxygen target and its own similar doxygen code, although this seems to be an undocumented
+        # feature. This version has some advantages over that so we will override it.  
+        # If not using catkin, we need to create the doxygen target
+        if(NOT TARGET doxygen)
+            add_custom_target(doxygen)
+        endif()
+        doxygen_add_docs(cmakeme_doxygen ${filesOrDirs} ALL)
+        add_dependencies(doxygen cmakeme_doxygen)  # make doxygen should build cmakeme_doxygen
         install(DIRECTORY ${CMAKE_BINARY_DIR}/html/ DESTINATION ${CMAKE_INSTALL_DOCDIR}/cxx)
     endif()
 
