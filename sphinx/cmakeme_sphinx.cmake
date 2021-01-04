@@ -26,7 +26,6 @@ Commands
 .. command:: cmakeme_sphinx_cmake
 
 Generate Sphinx documentation from the CMake Source files.  
-This function also creates a cmake package to import the documentation. It can be found with ``find_package(${PROJECT_NAME}_sphinx_cmake)``
 
     .. code-block:: cmake
 
@@ -48,21 +47,10 @@ This function also creates a cmake package to import the documentation. It can b
     ``copyright``
         The name of the copyright holder.
 
-Results Variables
-~~~~~~~~~~~~~~~~~
-
-When calling ``find_package(${PROJECT_NAME}_sphinx_cmake)`` The following variables will be defined
-
-.. variable:: ${PROJECT_NAME}_SPHINX_CMAKE_FOUND
-    This variable is defined if the package was found
-
-.. variable:: ${PROJECT_NAME}_SPHINX_CMAKE_DIR
-    The directory where the generated html can be found
-
 #]=======================================================================]
 option(BUILD_SPHINX_CMAKE "Build the CMake Sphinx Documentation" OFF)
 function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
-    if(BUILD_SPHINX_CMAKE)
+    if(BUILD_SPHINX_CMAKE OR BUILD_DOCS)
         find_program(SPHINX_EXECUTABLE
             NAMES sphinx-build
             DOC "Sphinx Documentation Builder (sphinx-doc.org)"
@@ -88,18 +76,7 @@ function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
             VERBATIM
             )
 
-        install(DIRECTORY ${CMAKE_BINARY_DIR}/html/cmake DESTINATION ${CMAKE_INSTALL_DOCDIR})
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/html/cmake/ DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
-        include(CMakePackageConfigHelpers)
-        # Write the configuration file that can be used to find the documentation
-        file(WRITE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_sphinx_cmake-config.cmake.in
-            "@PACKAGE_INIT@\n
-            set(${PROJECT_NAME}_sphinx_cmake_DIR  ${CMAKE_INSTALL_DOCDIR})\n")
-            
-         configure_package_config_file(${CMAKE_BINARY_DIR}/${PROJECT_NAME}_sphinx_cmake-config.cmake.in
-             ${PROJECT_NAME}_sphinx_cmake-config.cmake
-             INSTALL_DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}_sphinx_cmake PATH_VARS)
-        
-         install(FILES ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_sphinx_cmake-config.cmake DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}_sphinx_cmake)
     endif()
 endfunction()

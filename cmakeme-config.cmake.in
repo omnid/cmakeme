@@ -5,6 +5,7 @@ include(${CMAKEME_ROOT_DIR}/cmakeme_install.cmake)
 include(${CMAKEME_ROOT_DIR}/git_hash.cmake)
 include(${CMAKEME_ROOT_DIR}/cmakeme_pack.cmake)
 include(${CMAKEME_ROOT_DIR}/cmakeme_doxygen.cmake)
+include(${CMAKEME_ROOT_DIR}/sphinx/cmakeme_sphinx.cmake)
 
 
 # Add useful default compiler options here, for each system.  Users can opt-in to these
@@ -31,7 +32,3 @@ cmakeme_installdirs()
 
 
 option(BUILD_DOCS "Build all of the documentation generated using cmakeme" OFF)
-if(BUILD_DOCS)
-    set(BUILD_DOXYGEN ON CACHE BOOL "Overriden by BUILD_DOCS" FORCE)
-    set(BUILD_SPHINX_CMAKE ON CACHE BOOL "Overriden by BUILD_DOCS" FORCE)
-endif()
