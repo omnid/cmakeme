@@ -68,7 +68,7 @@ For example, if the project name is ``myproject`` and the target name is ``mytar
 .. code-block:: c
 
     #include"myproject/mytarget_git_hash.h"
-    // The above incldue does the following
+    // The above include does the following
     #include"myproject/myproject_git_hash.h" // git hashes for the overall project
     #define GIT_HASH_mytarget // git hash for the specified target
 
