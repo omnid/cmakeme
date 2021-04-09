@@ -85,12 +85,19 @@ function(cmakeme_hash target)
   get_target_property(githash_srcdir ${target} SOURCE_DIR)
   # append each library location to the list of files to hash
   foreach(githash_lib ${githash_libs})
-    list(APPEND files $<TARGET_FILE:${githash_lib}>) 
+    # cmake Object libraries have a series of object files rather than a single object file name
+    get_target_property(type ${githash_lib} TYPE)
+    if(type STREQUAL OBJECT_LIBRARY)
+      list(APPEND githash_files $<TARGET_OBJECTS:${githash_lib}>)
+    else()
+      list(APPEND githash_files $<TARGET_FILE:${githash_lib}>)
+    endif()
+
   endforeach()
 
   # append each source file location to the list of files to hash
-  list(APPEND files ${githash_sources})
-
+  list(APPEND githash_files ${githash_sources})
+  # replace the semicolons in the list with spaces to separate files
   add_custom_target(git_hash_${target}
     COMMAND ${CMAKE_BINARY_DIR}/git_hash_target.bash ${target} ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${target}_hash.h ${githash_files} ${githash_includes} ${githash_srcdir}/CMakeLists.txt
     COMMENT "Updating ${target}_hash.h"
