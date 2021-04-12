@@ -53,6 +53,36 @@ add_custom_target(git_hash ALL
 Commands
 ^^^^^^^^
 
+.. command:: cmakeme_interface_libraries
+
+The ``cmakeme_interface_libraries(library interface)`` function recursively traverses the INTERFACE_LINK_LIBRARIES brought in by linking against library
+
+.. code-block:: cmake
+
+  cmakeme_interface_libraries(library interface)
+
+  ``library`` The name of the library.
+
+  ``interface`` Name of variable that will contain a list of all libraries brought in as ``INTERFACE_LINK_LIBRARIES``
+
+.. note::
+   This is an internal function, but might be useful elsewhere
+#]=======================================================================]
+
+function(cmakeme_interface_libraries library interface)
+  if(TARGET ${library})
+    get_target_property(nextint ${library} INTERFACE_LINK_LIBRARIES)
+    if(nextint)
+      list(APPEND ${interface} ${nextint})
+      foreach(inter ${nextint})
+        cmakeme_interface_libraries(${inter} ${interface})
+      endforeach()
+    endif()
+  endif()
+  set(${interface} "${${interface}}" PARENT_SCOPE)
+endfunction()
+  
+#[=======================================================================[.rst:
 .. command:: cmakeme_hash
 
 The ``cmakeme_hash(target)`` function hashes the files used for the specified target and its dependencies
@@ -72,7 +102,7 @@ For example, if the project name is ``myproject`` and the target name is ``mytar
     #include"myproject/myproject_git_hash.h" // git hashes for the overall project
     #define GIT_HASH_mytarget // git hash for the specified target
 
-.. note::
+.. note::    
 
   Include sparingly, as any file that includes the header file is recompiled every time you build.
 #]=======================================================================]
@@ -83,16 +113,28 @@ function(cmakeme_hash target)
   get_target_property(githash_sources ${target} SOURCES)
   get_target_property(githash_includes ${target} INCLUDE_DIRECTORIES)
   get_target_property(githash_srcdir ${target} SOURCE_DIR)
-  # append each library location to the list of files to hash
-  foreach(githash_lib ${githash_libs})
-    # cmake Object libraries have a series of object files rather than a single object file name
-    get_target_property(type ${githash_lib} TYPE)
-    if(type STREQUAL OBJECT_LIBRARY)
-      list(APPEND githash_files $<TARGET_OBJECTS:${githash_lib}>)
-    else()
-      list(APPEND githash_files $<TARGET_FILE:${githash_lib}>)
-    endif()
 
+
+  # Gather up recursive interface libraries from the libraries that are linked against the target
+  foreach(githash_lib ${githash_libs})
+    cmakeme_interface_libraries(${githash_lib} githash_interface_libs)
+  endforeach()
+
+  # append each library location to the list of files to hash
+  foreach(githash_lib IN LISTS githash_libs githash_interface_libs)
+    if(TARGET ${githash_lib})
+      # cmake Object libraries have a series of object files rather than a single object file name
+      get_target_property(type ${githash_lib} TYPE)
+      if(type STREQUAL OBJECT_LIBRARY)
+        list(APPEND githash_files $<TARGET_OBJECTS:${githash_lib}>)
+      elseif(type STREQUAL INTERFACE_LIBRARY)
+        #  ignore interface libraries since they don't have files assocaited with them
+        #  They are included from the recursive traversal, but it is only the endpoints of that
+        # traversal that contain the actual dependencies that correspond to real files (I think)
+      else()
+        list(APPEND githash_files $<TARGET_FILE:${githash_lib}>)
+      endif()
+    endif()
   endforeach()
 
   # append each source file location to the list of files to hash
