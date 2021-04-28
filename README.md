@@ -28,8 +28,7 @@ cmakeme_doxygen(README.md src/)
 cmakeme_package(EMAIL myemail@website.com ARCH_64
                 DEBIAN_DEPENDS dep1 dep2 ARCHLINUX_DEPENDS dep1a dep2a)
 ```
-
-
+For more details, see the [API Documentation](https://omnid.github.io/cmakeme)    
 # Installation
 1. This project has no dependencies (other than `cmake` and optionally `git`, `bash`, and `find`).
 
