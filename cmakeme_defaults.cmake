@@ -15,7 +15,8 @@ Commands
 ^^^^^^^^
     .. command:: cmakeme_defaults
 
-        Sets up all of the default settings from cmakeme:
+    Sets up all of the default settings from cmakeme:
+
         1. Sets a default build type (single-configuration generators, and is user-overridable with ``-DCMAKE_BUILD_TYPE=``)
         2. Disables in-source builds (prevent accidentally polluting the source space)
         3. Disables language extensions
@@ -25,8 +26,7 @@ Commands
             cmakeme_defaults(type)
 
         ``type``
-        The build type to set as the default type.
-        (Release, Debug, RelWithDebInfo, MinSizeRel, or "")
+        The build type used by default (Release, Debug, RelWithDebInfo, MinSizeRel, or "").
 #]=======================================================================]
 macro(cmakeme_defaults type)
   cmakeme_disable_in_source_builds()
@@ -50,7 +50,7 @@ endmacro()
             cmakeme_set_default_build_type(type)
 
         ``type``
-        The build type to set as the default type (Release, Debug, RelWithDebInfo, MinSizeRel, or "")
+        The build used by default (Release, Debug, RelWithDebInfo, MinSizeRel, or "")
 #]=======================================================================]
 macro(cmakeme_set_default_build_type type)
   set(DEFAULT_BUILD_TYPE ${type})
@@ -89,11 +89,12 @@ endfunction()
 #[=======================================================================[.rst:
     .. command:: cmakeme_no_lang_extensions 
     
-        Disable c/c++ language extensions globally
+      Disable C/C++ language extensions globally by default.
+      Can be enabled on a per-target basis by setting the CXX_EXTENSIONS property
 
-    .. code-block:: cmake
+        .. code-block:: cmake
 
-        cmakeme_no_lang_extensions
+          cmakeme_no_lang_extensions()
 #]=======================================================================]
 macro(cmakeme_no_lang_extensions)
   set(CMAKE_CXX_EXTENSIONS OFF)
