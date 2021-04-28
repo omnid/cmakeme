@@ -23,6 +23,9 @@ cmakeme_install(TARGETS my_lib NAMESPACE my_lib DEPENDS MyDependency)
 
 # Generate doxygen documentation from source files, and use the README.md as the first page
 cmakeme_doxygen(README.md src/)
+
+# Let the developer create binary packages for various systems by running `make package`
+cmakeme_package(EMAIL myemail@website.com ARCH_64 DEBIAN_DEPENDS dep1 dep2 ARCHLINUX_DEPENDS dep1a dep2a)
 ```
 
 
