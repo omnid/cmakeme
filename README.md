@@ -3,6 +3,29 @@ A library of CMake utilities for installing executables and libraries,
 setting default compiler flags, accessing git commit hashes and
 hashes of source files at compile time.  
 
+# Basic Usage
+```cmake
+find_package(cmakeme)   # Use this package
+cmakeme_defaults(Debug) # Default build type is Debug for single-generator builds
+
+find_package(MyDependency) # bring in a dependency
+
+# add a library, as normal 
+add_library(my_lib src/file1.cpp src/file2.cpp)
+target_link_libraries(my_lib PUBLIC MyDependency::dep1) 
+# We do not need to add include directories to the install interface
+target_include_directories(my_lib
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+
+# Simplify the installation process. Users of this library are able to
+# find_package(my_lib) then target_link_libraries(target PUBLIC my_lib::my_lib
+cmakeme_install(TARGETS my_lib NAMESPACE my_lib DEPENDS MyDependency)
+
+# Generate doxygen documentation from source files, and use the README.md as the first page
+cmakeme_doxygen(README.md src/)
+```
+
+
 # Installation
 1. This project has no dependencies (other than `cmake` and optionally `git`, `bash`, and `find`).
 
