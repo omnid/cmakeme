@@ -44,7 +44,7 @@ Commands
     ``PACKAGE_NAME name`` 
     The name of the package, as used by `find_package`. So the package will be imported via `find_package(name)` defaults to the value of `ns`
 
-    ``DEPENDS deps``:w
+    ``DEPENDS deps``
     The dependencies of the listed targets that should be found when `find_package(name)` is called.
     In other words, imported dependencies that are required for using the target
 
