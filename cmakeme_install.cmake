@@ -47,6 +47,8 @@ Commands
     ``DEPENDS deps``
     The dependencies of the listed targets that should be found when `find_package(name)` is called.
     In other words, imported dependencies that are required for using the target
+    This variable can also be used to include additional custom cmake files. Name the file `myfile-config.cmake` and install it to
+    the path searched by `find_package` (e.g., `install(FILES myfile-config.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/${DATADIR}/omnid_parameters)`)
 
     .. note::
         Use ``target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>)`` to add include directories 
