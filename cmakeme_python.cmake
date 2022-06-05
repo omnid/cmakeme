@@ -22,7 +22,7 @@ Commands
             cmakeme_python(setup directory pkgname)
 
         ``directory``
-        The path to the directory containing setup.py/setup.cfg
+        Absolute path to the directory containing setup.py/setup.cfg
 
         ``pkgname``
         The name of the python package
@@ -42,12 +42,11 @@ function(cmakeme_python directory pkgname)
     endif()
     # Build the wheel during code generation time
     set(outdir "${CMAKE_BINARY_DIR}/${pkgname}/dist")
-    add_custom_command(OUTPUT ${outdir}
+    add_custom_target(${pkgname} ALL ${CMAKE_COMMAND} -E make_directory ${outdir})
+    add_custom_command(TARGET ${pkgname}
       COMMAND ${PYTHON_EXECUTABLE}
       ARGS -m build ${directory} --outdir ${outdir}
-      DEPENDS ${directory}
       )
-    add_custom_target(${pkgname} ALL DEPENDS ${outdir})
   else()
     message(WARNING "Cannot cmakeme_python because Python Interpreter not found")
   endif()

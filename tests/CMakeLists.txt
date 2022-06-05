@@ -3,4 +3,4 @@ project(cmakeme_tests)
 
 find_package(cmakeme)
 cmakeme_defaults(Debug)
-cmakeme_python(cmakeme_python_test cmakeme_python_test)
+cmakeme_python(${CMAKE_CURRENT_LIST_DIR}/cmakeme_python_test cmakeme_python_test)

@@ -41,7 +41,13 @@ install(DIRECTORY sphinx DESTINATION share/cmakeme)
 
 cmakeme_package(EMAIL elwin@northwestern.edu ARCH_ANY)
 enable_testing()
-add_test(NAME cmakeme_test COMMAND ${CMAKE_COMMAND} -B ${CMAKE_BINARY_DIR}/tests ${CMAKE_CURRENT_LIST_DIR}/tests -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}/${INSTALL_DIR})
+add_test(NAME cmakeme_test COMMAND
+  ${CMAKE_COMMAND}
+  -DTEST_BIN_DIR=${CMAKE_BINARY_DIR}/tests
+  -DTEST_DIR=${CMAKE_CURRENT_LIST_DIR}/tests
+  -DPREFIX_PATH=${CMAKE_INSTALL_PREFIX}/${INSTALL_DIR}
+  -P ${CMAKE_CURRENT_LIST_DIR}/tests/run_tests.cmake
+  )
 
 # Create a doxygen target so it works with our ROS documentation system
 add_custom_target(doxygen COMMAND echo "No doxygen documentation for this package")
