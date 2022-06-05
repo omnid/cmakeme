@@ -47,6 +47,11 @@ function(cmakeme_python directory pkgname)
       COMMAND ${PYTHON_EXECUTABLE}
       ARGS -m build ${directory} --outdir ${outdir}
       )
+    # Install the wheel. This requires
+    # 1. Getting the name of the wheel file
+    install(CODE "file(GLOB wheels LIST_DIRECTORIES false \"${outdir}/*.whl\")
+                  message(\"Wheel is \${wheels}\")")
+
   else()
     message(WARNING "Cannot cmakeme_python because Python Interpreter not found")
   endif()

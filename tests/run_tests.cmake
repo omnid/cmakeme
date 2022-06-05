@@ -6,3 +6,4 @@ execute_process(COMMAND ${CMAKE_COMMAND} -B ${TEST_BIN_DIR} ${TEST_DIR} -DCMAKE_
 
 # Build the test project
 execute_process(COMMAND ${CMAKE_COMMAND} --build ${TEST_BIN_DIR})
+execute_process(COMMAND ${CMAKE_COMMAND} --install ${TEST_BIN_DIR})
