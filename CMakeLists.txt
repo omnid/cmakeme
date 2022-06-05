@@ -20,14 +20,15 @@ configure_package_config_file(cmakeme-config.cmake.in cmakeme-config.cmake
 
 set(CMAKEME_ROOT_DIR ${CMAKE_SOURCE_DIR})
 
-cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid ../../omnid/cxx/index.html "2021 by Matthew Elwin")
+cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid ../../omnid/cxx/index.html "2022 by Matthew Elwin")
 
 install(FILES
   ${CMAKE_BINARY_DIR}/cmakeme-config.cmake #generated file
   cmakeme_defaults.cmake
+  cmakeme_doxygen.cmake
   cmakeme_install.cmake
   cmakeme_pack.cmake
-  cmakeme_doxygen.cmake
+  cmakeme_python.cmake
   git_hash.bash.in
   git_hash.cmake
   git_hash_target.bash.in
@@ -40,6 +41,7 @@ install(DIRECTORY sphinx DESTINATION share/cmakeme)
 
 cmakeme_package(EMAIL elwin@northwestern.edu ARCH_ANY)
 enable_testing()
-add_test(NAME null_test COMMAND echo "TODO: No unit tests exist for tivacmake")
+add_test(NAME cmakeme_test COMMAND ${CMAKE_COMMAND} -B ${CMAKE_BINARY_DIR}/tests ${CMAKE_CURRENT_LIST_DIR}/tests -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}/${INSTALL_DIR})
 
+# Create a doxygen target so it works with our ROS documentation system
 add_custom_target(doxygen COMMAND echo "No doxygen documentation for this package")
