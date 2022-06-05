@@ -10,7 +10,8 @@ cmakeme_defaults(Debug) # Default build type is Debug for single-generator build
 
 find_package(MyDependency) # bring in a dependency
 
-# add a library, as usual cmakeme_flags contains some default C and C++ flags
+# add a library, as usual 
+# cmakeme_flags contains some default C and C++ flags
 # that are generally useful (such as enabling warnings)
 add_library(my_lib src/file1.cpp src/file2.cpp)
 target_link_libraries(my_lib PUBLIC MyDependency::dep1 cmakeme_flags)
@@ -20,7 +21,7 @@ target_include_directories(my_lib
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 
 # Simplify the installation process. Users of this library are able to
-# find_package(my_lib) then target_link_libraries(target PUBLIC my_lib::my_lib
+# find_package(my_lib) then target_link_libraries(target PUBLIC my_lib::my_lib)
 cmakeme_install(TARGETS my_lib NAMESPACE my_lib DEPENDS MyDependency)
 
 # Generate doxygen documentation from source files, and use the README.md as the first page
@@ -60,3 +61,4 @@ The available modules are documented in the [detailed API documentation](https:/
 5. `cmakeme_cpack`: Create binary installers for debian, archlinux, and other platforms
 6. `cmakeme_doxygen`: Simplify doxygen use by providing common default options
 7. `sphinx_cmake`: Create official-looking CMake documentation using sphinx.
+8. `cmakeme_python`: Installation and development of python packages
