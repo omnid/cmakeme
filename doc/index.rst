@@ -23,7 +23,7 @@ Contents
    cmakeme_pack    (Create Installation Packages) <cmakeme_pack>
    cmakeme_sphinx  (Generate Sphinx Documentation for CMake) <cmakeme_sphinx>
    git_hash        (Access git hashes at compile time) <git_hash>
-
+   cmakeme_python  (Install python packages alongside the build) <cmakeme_python>
 
 Indices and tables
 ==================

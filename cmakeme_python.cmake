@@ -15,7 +15,10 @@ Commands
 ^^^^^^^^
     .. command:: cmakeme_python_package
 
-    Creates a python package installable from pip by invoking the appropriate setup.py
+    Uses a package's setup.cfg/setup.py to build and install a package locally on the machine.
+    The wheel file is created and saved in the build directory.
+    When install is run, the wheel is installed relative to the CMAKE_INSTALL_PREFIX.
+    When installing to the system or to a ROS workspace this will put the python package directly on the path. Otherwise you will need to explicitly add the install path to the PYTHONPATH.
 
         .. code-block:: cmake
 
