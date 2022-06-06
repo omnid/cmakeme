@@ -41,11 +41,12 @@ install(DIRECTORY sphinx DESTINATION share/cmakeme)
 
 cmakeme_package(EMAIL elwin@northwestern.edu ARCH_ANY)
 enable_testing()
+# This test requires that cmakeme has already been installed
 add_test(NAME cmakeme_test COMMAND
   ${CMAKE_COMMAND}
   -DTEST_BIN_DIR=${CMAKE_BINARY_DIR}/tests
   -DTEST_DIR=${CMAKE_CURRENT_LIST_DIR}/tests
-  -DPREFIX_PATH=${CMAKE_INSTALL_PREFIX}/${INSTALL_DIR}
+  -DCMAKEME_PATH=${CMAKE_INSTALL_PREFIX}/${INSTALL_DIR}
   -P ${CMAKE_CURRENT_LIST_DIR}/tests/run_tests.cmake
   )
 

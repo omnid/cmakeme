@@ -32,14 +32,6 @@ find_package(PythonInterp)
 
 function(cmakeme_python directory pkgname)
   if(PYTHONINTERP_FOUND)
-    # If we are in a virtual/conda environment
-    # (see https://www.scivision.dev/cmake-install-python-package/
-    # Accessed 06/05/2022
-    if(DEFINED ENV{VIRTUAL_ENV} OR DEFINED ENV{CONDA_PREFIX})
-      set(_pip_args)
-    else()
-      set(_pip_args "--user")
-    endif()
     # Build the wheel during code generation time
     set(outdir "${CMAKE_BINARY_DIR}/${pkgname}/dist")
     add_custom_target(${pkgname} ALL ${CMAKE_COMMAND} -E make_directory ${outdir})
@@ -48,10 +40,10 @@ function(cmakeme_python directory pkgname)
       ARGS -m build ${directory} --outdir ${outdir}
       )
     # Install the wheel. This requires
-    # 1. Getting the name of the wheel file
     install(CODE "file(GLOB wheels LIST_DIRECTORIES false \"${outdir}/*.whl\")
-                  message(\"Wheel is \${wheels}\")")
-
+                  message(\"Wheel is \${wheels}\")
+                  execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --prefix ${CMAKE_INSTALL_PREFIX} \${wheels})"
+      )
   else()
     message(WARNING "Cannot cmakeme_python because Python Interpreter not found")
   endif()
