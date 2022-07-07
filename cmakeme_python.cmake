@@ -37,8 +37,8 @@ function(cmakeme_python directory pkgname)
   if(PYTHONINTERP_FOUND)
     # Build the wheel during code generation time
     set(outdir "${CMAKE_BINARY_DIR}/${pkgname}/dist")
-    add_custom_target(${pkgname} ALL ${CMAKE_COMMAND} -E make_directory ${outdir})
-    add_custom_command(TARGET ${pkgname}
+    add_custom_target(${pkgname}-python ALL ${CMAKE_COMMAND} -E make_directory ${outdir})
+    add_custom_command(TARGET ${pkgname}-python
       COMMAND ${PYTHON_EXECUTABLE}
       ARGS -m build ${directory} --outdir ${outdir}
       )
