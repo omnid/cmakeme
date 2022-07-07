@@ -36,17 +36,24 @@ find_package(PythonInterp)
 function(cmakeme_python directory pkgname)
   if(PYTHONINTERP_FOUND)
     # Build the wheel during code generation time
-    set(outdir "${CMAKE_BINARY_DIR}/${pkgname}/dist")
-    add_custom_target(${pkgname}-python ALL ${CMAKE_COMMAND} -E make_directory ${outdir})
-    add_custom_command(TARGET ${pkgname}-python
-      COMMAND ${PYTHON_EXECUTABLE}
-      ARGS -m build ${directory} --outdir ${outdir}
+    set(outdir "${CMAKE_BINARY_DIR}/dist")
+
+    # This target actually builds the wheel
+    add_custom_target(${pkgname}-python ALL
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${outdir}
+      COMMAND ${PYTHON_EXECUTABLE} -m build ${directory} --outdir ${outdir}
       )
-    # Install the wheel. This requires
-    install(CODE "file(GLOB wheels LIST_DIRECTORIES false \"${outdir}/*.whl\")
-                  message(STATUS \"Wheel is \${wheels}\")
-                  execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --prefix ${CMAKE_INSTALL_PREFIX} \${wheels})"
+
+    # This target gets the wheel filename (which is difficult to compute beforehand)
+    add_custom_target(${pkgname}-python-wheel ALL
+      COMMAND ${CMAKE_COMMAND} -E echo ${outdir}/${pkgname}-*.whl > ${outdir}/${pkgname}-wheel-name
+      DEPENDS ${pkgname}-python
       )
+
+    # Install the wheel. This requires us to read the wheel name and then use it to install. We must remove the old wheel first
+    # Note: Use OUTPUT_VARIABLE to capture output of execute_process. Results can be output using message(), which is useful for debugging
+    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E cat ${outdir}/${pkgname}-wheel-name OUTPUT_VARIABLE wheel_name)
+                execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --force-reinstall --prefix ${CMAKE_INSTALL_PREFIX} \${wheel_name})")
   else()
     message(WARNING "Cannot cmakeme_python because Python Interpreter not found")
   endif()
