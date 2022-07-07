@@ -44,7 +44,7 @@ function(cmakeme_python directory pkgname)
       )
     # Install the wheel. This requires
     install(CODE "file(GLOB wheels LIST_DIRECTORIES false \"${outdir}/*.whl\")
-                  message(\"Wheel is \${wheels}\")
+                  message(STATUS \"Wheel is \${wheels}\")
                   execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --prefix ${CMAKE_INSTALL_PREFIX} \${wheels})"
       )
   else()
