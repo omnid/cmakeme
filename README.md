@@ -15,7 +15,6 @@ find_package(MyDependency) # bring in a dependency
 # that are generally useful (such as enabling warnings)
 add_library(my_lib src/file1.cpp src/file2.cpp)
 target_link_libraries(my_lib PUBLIC MyDependency::dep1 cmakeme_flags)
-
 # We do not need to add include directories to the install interface
 target_include_directories(my_lib
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
@@ -62,3 +61,4 @@ The available modules are documented in the [detailed API documentation](https:/
 6. `cmakeme_doxygen`: Simplify doxygen use by providing common default options
 7. `sphinx_cmake`: Create official-looking CMake documentation using sphinx.
 8. `cmakeme_python`: Installation and development of python packages
+9. `cmakeme_swig`: Automatically generate python bindings from C code

@@ -7,7 +7,7 @@ include(${CMAKEME_ROOT_DIR}/cmakeme_pack.cmake)
 include(${CMAKEME_ROOT_DIR}/cmakeme_python.cmake)
 include(${CMAKEME_ROOT_DIR}/cmakeme_doxygen.cmake)
 include(${CMAKEME_ROOT_DIR}/sphinx/cmakeme_sphinx.cmake)
-
+include(${CMAKEME_ROOT_DIR}/cmakeme_swig.cmake)
 
 # Add useful default compiler options here, for each system.  Users can opt-in to these
 # We treat the target as IMPORTED so that a new copy of the library is not actually created

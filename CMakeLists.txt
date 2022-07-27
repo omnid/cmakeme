@@ -29,6 +29,7 @@ install(FILES
   cmakeme_install.cmake
   cmakeme_pack.cmake
   cmakeme_python.cmake
+  cmakeme_swig.cmake
   git_hash.bash.in
   git_hash.cmake
   git_hash_target.bash.in
