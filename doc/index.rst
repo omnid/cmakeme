@@ -24,6 +24,7 @@ Contents
    cmakeme_sphinx  (Generate Sphinx Documentation for CMake) <cmakeme_sphinx>
    git_hash        (Access git hashes at compile time) <git_hash>
    cmakeme_python  (Install python packages alongside the build) <cmakeme_python>
+   cmakeme_swig    (Generate python bindings for C libraries using swig) <cmakeme_swig>
 
 Indices and tables
 ==================
