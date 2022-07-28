@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.22)
 project(cmakeme LANGUAGES NONE VERSION 0.2.0)
 
 # Since cmakeme is not installed, we load the individual modules manually
