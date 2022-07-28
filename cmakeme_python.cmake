@@ -42,7 +42,7 @@ function(cmakeme_python directory pkgname)
   # This target actually builds the wheel
   add_custom_target(${pkgname}-python ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${outdir}
-    COMMAND ${PYTHON_EXECUTABLE} -m build ${directory} --outdir ${outdir}
+    COMMAND ${Python3_EXECUTABLE} -m build ${directory} --outdir ${outdir}
     )
 
   # This target gets the wheel filename (which is difficult to compute beforehand)
