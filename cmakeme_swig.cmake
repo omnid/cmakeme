@@ -85,6 +85,8 @@ function(cmakeme_swig)
       "%include \"${header}\"\n")
   endforeach()
 
+  file(WRITE "${cmakeme_swig_library_dir}/__init__.py" "from .${CMAKEME_SWIG_LIBRARY} import *")
+  
   # Add the swig library
   swig_add_library(${CMAKEME_SWIG_LIBRARY}_swig LANGUAGE python
     OUTPUT_DIR ${cmakeme_swig_library_dir}
