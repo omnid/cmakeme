@@ -35,6 +35,10 @@ function(cmakeme_swig)
     include(UseSWIG)
   endif()
 
+  if(NOT Python3_Development.Module_FOUND)
+    find_package(Python3 REQUIRED COMPONENTS Development.Module)
+  endif()
+
   # Parse the arguments
   cmake_parse_arguments(
     CMAKEME_SWIG
@@ -78,8 +82,8 @@ function(cmakeme_swig)
   endforeach()
 
   # Add the swig library
-  swig_add_library(${CMAKEME_SWIG_LIBRARY}_swig LANGUAGE python SOURCES ${CMAKEME_SWIG_LIBRARY}.i)
-  target_link_libraries(${CMAKEME_SWIG_LIBRARY}_swig ${CMAKEME_SWIG_LIBRARY} Python::Python)
+  swig_add_library(${CMAKEME_SWIG_LIBRARY}_swig LANGUAGE python SOURCES ${CMAKE_BINARY_DIR}/${CMAKEME_SWIG_LIBRARY}/${CMAKEME_SWIG_LIBRARY}.i)
+  target_link_libraries(${CMAKEME_SWIG_LIBRARY}_swig ${CMAKEME_SWIG_LIBRARY} Python3::Module)
   set_property(SOURCE ${CMAKEME_SWIG_LIBRARY}.i PROPERTY SWIG_MODULE_NAME ${CMAKEME_SWIG_LIBRARY})
   set_property(TARGET ${CMAKEME_SWIG_LIBRARY} PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
   set_property(TARGET ${CMAKEME_SWIG_LIBRARY} PROPERTY SWIG_COMPILE_OPTIONS -doxygen) # carry over doxygen comments to python
