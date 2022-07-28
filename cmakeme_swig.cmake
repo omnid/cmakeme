@@ -82,7 +82,7 @@ function(cmakeme_swig)
 
   foreach(header ${CMAKEME_SWIG_HEADERS})
     file(APPEND ${swig_file}
-      "#include \"${header}\"\n")
+      "%include \"${header}\"\n")
   endforeach()
 
   # Add the swig library
