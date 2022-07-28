@@ -37,8 +37,7 @@ function(cmakeme_swig)
   endif()
 
   if(NOT Python3_Development.Module_FOUND)
-    find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
-    # Note: Interpreter is needed to find some python directories like Python3_SITELIB
+    find_package(Python3 REQUIRED COMPONENTS Development.Module)
   endif()
 
   # Parse the arguments
@@ -86,8 +85,6 @@ function(cmakeme_swig)
       "#include \"${header}\"\n")
   endforeach()
 
-  file(WRITE "${CMAKE_BINARY_DIR}/${CMAKEME_SWIG_LIBRARY}/__init__.py" "")
-
   # Add the swig library
   swig_add_library(${CMAKEME_SWIG_LIBRARY}_swig LANGUAGE python
     OUTPUT_DIR ${cmakeme_swig_library_dir}
@@ -102,6 +99,7 @@ function(cmakeme_swig)
     LIBRARY_OUTPUT_DIRECTORY ${cmakeme_swig_library_dir})
 
   install(DIRECTORY ${cmakeme_swig_library_dir}
-    DESTINATION ${Python3_SITELIB}
-    PATTERN "*.{i,c}" EXCLUDE)
+    DESTINATION "lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages"
+    PATTERN "*.i" EXCLUDE
+    PATTERN "*.c" EXCLUDE)
 endfunction()
