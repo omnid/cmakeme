@@ -9,9 +9,6 @@ Use this module with ``find_package(cmakeme)``
 
 #]=======================================================================]
 
-
-
-
 #[=======================================================================[.rst:
 Commands
 ^^^^^^^^
@@ -33,6 +30,10 @@ Commands
 #]=======================================================================]
 
 function(cmakeme_swig)
+  if(NOT SWIG_FOUND)
+    find_package(SWIG REQUIRED COMPONENTS python)
+    include(UseSWIG)
+  endif()
 
   # Parse the arguments
   cmake_parse_arguments(
@@ -76,5 +77,10 @@ function(cmakeme_swig)
       "#include \"${header}\"\n")
   endforeach()
 
-
+  # Add the swig library
+  swig_add_library(${CMAKEME_SWIG_LIBRARY}_swig LANGUAGE python SOURCES ${CMAKEME_SWIG_LIBRARY}.i)
+  target_link_libraries(${CMAKEME_SWIG_LIBRARY}_swig ${CMAKEME_SWIG_LIBRARY} Python::Python)
+  set_property(SOURCE ${CMAKEME_SWIG_LIBRARY}.i PROPERTY SWIG_MODULE_NAME ${CMAKEME_SWIG_LIBRARY})
+  set_property(TARGET ${CMAKEME_SWIG_LIBRARY} PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
+  set_property(TARGET ${CMAKEME_SWIG_LIBRARY} PROPERTY SWIG_COMPILE_OPTIONS -doxygen) # carry over doxygen comments to python
 endfunction()
