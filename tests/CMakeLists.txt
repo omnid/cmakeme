@@ -8,3 +8,4 @@ cmakeme_python(${CMAKE_CURRENT_LIST_DIR}/cmakeme_python_test cmakeme_python_test
 add_library(testpy testpy.c)
 target_include_directories(testpy PUBLIC include/)
 cmakeme_swig(LIBRARY testpy HEADERS testpy/testpy.h)
+
