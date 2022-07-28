@@ -9,3 +9,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} --build ${TEST_BIN_DIR} --target instal
 if(NOT EXISTS ${TEST_BIN_DIR}/dist/cmakeme_python_test-0.0.1-py3-none-any.whl)
   message(FATAL_ERROR "Could not find ${TEST_BIN_DIR}/dist/cmakeme_python_test-0.0.1-py3-none-any.whl")
 endif()
+
+if(NOT EXISTS ${TEST_BIN_DIR}/testpy/testpy.i)
+  message(FATAL_ERROR "Could not find ${TEST_BIN_DIR}/testpy/testpy.i")
+endif()
