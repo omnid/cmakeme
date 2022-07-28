@@ -3,7 +3,8 @@ cmakeme_swig
 ----------------
 Easily generate python bindings for simple C programs, without writing any
 SWIG interface files. Doxygen comments from the C program will be carried
-over to the python bindings.
+over to the python bindings. These bindings will be installed to a location
+on the python path
 
 Use this module with ``find_package(cmakeme)``
 
@@ -36,7 +37,8 @@ function(cmakeme_swig)
   endif()
 
   if(NOT Python3_Development.Module_FOUND)
-    find_package(Python3 REQUIRED COMPONENTS Development.Module)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
+    # Note: Interpreter is needed to find some python directories like Python3_SITELIB
   endif()
 
   # Parse the arguments
@@ -64,8 +66,11 @@ function(cmakeme_swig)
     message(FATAL_ERROR "Must specify at least one header file in the HEADERS argument")
   endif()
 
+  # Setup the swig output directory
+  set(cmakeme_swig_library_dir  ${CMAKE_BINARY_DIR}/${CMAKEME_SWIG_LIBRARY})
+  set(swig_file ${cmakeme_swig_library_dir}/${CMAKEME_SWIG_LIBRARY}.i)
+
   # Generate the .i file
-  set(swig_file ${CMAKE_BINARY_DIR}/${CMAKEME_SWIG_LIBRARY}/${CMAKEME_SWIG_LIBRARY}.i)
   file(WRITE  ${swig_file}
     "%module ${CMAKEME_SWIG_LIBRARY}\n"
     "%{\n")
@@ -81,10 +86,12 @@ function(cmakeme_swig)
       "#include \"${header}\"\n")
   endforeach()
 
+  file(WRITE "${CMAKE_BINARY_DIR}/${CMAKEME_SWIG_LIBRARY}/__init__.py" "")
+
   # Add the swig library
   swig_add_library(${CMAKEME_SWIG_LIBRARY}_swig LANGUAGE python
-    OUTPUT_DIR ${CMAKE_BINARY_DIR}/${CMAKEME_SWIG_LIBRARY}
-    SOURCES ${CMAKE_BINARY_DIR}/${CMAKEME_SWIG_LIBRARY}/${CMAKEME_SWIG_LIBRARY}.i)
+    OUTPUT_DIR ${cmakeme_swig_library_dir}
+    SOURCES ${swig_file})
   target_link_libraries(${CMAKEME_SWIG_LIBRARY}_swig ${CMAKEME_SWIG_LIBRARY} Python3::Module)
 
   set_property(SOURCE ${CMAKEME_SWIG_LIBRARY}.i PROPERTY SWIG_MODULE_NAME ${CMAKEME_SWIG_LIBRARY})
@@ -92,5 +99,9 @@ function(cmakeme_swig)
   set_target_properties(${CMAKEME_SWIG_LIBRARY}_swig PROPERTIES
     SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON
     SWIG_COMPILE_OPTIONS -doxygen
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKEME_SWIG_LIBRARY})
+    LIBRARY_OUTPUT_DIRECTORY ${cmakeme_swig_library_dir})
+
+  install(DIRECTORY ${cmakeme_swig_library_dir}
+    DESTINATION ${Python3_SITELIB}
+    PATTERN "*.{i,c}" EXCLUDE)
 endfunction()
