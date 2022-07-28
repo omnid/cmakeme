@@ -3,6 +3,7 @@
 /// \file
 /// \brief A test C function to be called from python
 
+#include<stdbool.h>
 /// \brief the maximum length of the string
 #define STR_MAX_LEN 10
 
@@ -22,3 +23,5 @@ int get_length(struct StrLen str);
 /// \param str data should be a null terminated string
 /// \return true if the string was null terminated
 bool update_length(struct StrLen *);
+
+#endif
