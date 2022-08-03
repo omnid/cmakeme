@@ -63,7 +63,7 @@ function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
         set(conf_homepage ${org_url})
         set(conf_organization ${orgname})
         set(conf_copyright ${copyright})
-        configure_file(${CMAKEME_ROOT_DIR}/sphinx/conf.py.in sphinx/conf.py)
+        configure_file(${CMAKEME_ROOT_DIR}/sphinx/conf_cmake.py.in sphinx/conf.py)
 
         add_custom_target(cmake_docs ALL
             COMMAND ${SPHINX_EXECUTABLE}
