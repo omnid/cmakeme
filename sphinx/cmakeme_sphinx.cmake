@@ -5,12 +5,17 @@
 cmakeme_sphinx
 --------------
 
-Generate sphinx documentation for .cmake files.
+Generate sphinx documentation for .cmake and .py files.
+
 This module is based off of the system the CMake project uses for
 generating its own documentation in CMake's ``Utilties/Sphinx`` directory
 but can be customized/used by any cmake project.
 
-Use this module with ``find_package(cmakeme)``
+It also has facilities for documenting python modules with sphinx.
+Docstrings are automatically extracted from the provided modules
+
+This module is included with ``find_package(cmakeme)`` but can also
+be found with ``find_package(cmakeme_sphinx)``
 
 #]=======================================================================]
 
@@ -20,6 +25,10 @@ Variables
 .. variable:: BUILD_SPHINX_CMAKE
 
 Default (``OFF``). Set to ``ON`` to build sphinx documentation when calling ``cmakeme_sphinx_cmake``
+
+.. variable:: BUILD_DOCS
+
+Default (``OFF``). Set to ``ON`` to build all documentation in the system (sphinx, doxygen, etc)
 
 Commands
 ^^^^^^^^

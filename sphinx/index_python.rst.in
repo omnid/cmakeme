@@ -1,4 +1,4 @@
-Welcome to $CMAKEME_SPHINX_PYTHON_PACKAGE@'s documentation!
+Welcome to @CMAKEME_SPHINX_PYTHON_PACKAGE@'s documentation!
 ================================================
 
 @CMAKEME_SPHINX_PYTHON_MOD_RST@
