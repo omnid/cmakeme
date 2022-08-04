@@ -49,7 +49,7 @@ function(cmakeme_swig)
     ${ARGN}
     )
   if(CMAKEME_SWIG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "Unrecognized arguments to cmakeme_install: ${CMAKEME_UNPARSED_ARGUMENTS}")
+    message(FATAL_ERROR "Unrecognized arguments to cmakeme_install: ${CMAKEME_SWIG_UNPARSED_ARGUMENTS}")
   endif()
 
   if(NOT DEFINED CMAKEME_SWIG_LIBRARY)

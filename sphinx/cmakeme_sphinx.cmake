@@ -116,8 +116,16 @@ function(cmakeme_sphinx_python)
     "MODULES"
     ${ARGN}
     )
-  if(CMAKEME_SPHINX_PYTHON_ARGUMENTS)
-    message(FATAL_ERROR "Unrecognized arguments to cmakeme_install: ${CMAKEME_UNPARSED_ARGUMENTS}")
+  if(CMAKEME_SPHINX_PYTHON_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "Unrecognized arguments to cmakeme_install: ${CMAKEME_SPHINX_PYTHON_UNPARSED_ARGUMENTS}")
+  endif()
+
+  if(NOT CMAKEME_SPHINX_PYTHON_PACKAGE)
+    message(FATAL_ERROR "PACKAGE argument not specified")
+  endif()
+
+  if(NOT CMAKEME_SPHINX_PYTHON_MODULES)
+    message(FATAL_ERROR "MODULES not specified")
   endif()
 
   set(CMAKEME_SPHINX_PYTHON_MOD_RST "")
@@ -125,7 +133,8 @@ function(cmakeme_sphinx_python)
     set(CMAKEME_SPHINX_PYTHON_MOD_RST "${CMAKEME_SPHINX_PYTHON_MOD_RST}\n.. automodule:: ${mod}\n  :members:\n")
   endforeach()
 
-  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/index_python.rst.in ${CMAKE_BINARY_DIR}/index_python.rst)
+  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/index_python.rst.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/index_python.rst)
 
+  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/conf_python.py ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/conf.py)
   # TODO: We need the conf.py file setup, then we need to run sphinx
 endfunction()
