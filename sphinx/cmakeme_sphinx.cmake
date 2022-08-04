@@ -80,3 +80,43 @@ function(cmakeme_sphinx_cmake doc_dir orgname org_url copyright)
 
     endif()
 endfunction()
+
+#[=======================================================================[.rst:
+.. command:: cmakeme_sphinx_python
+
+Generate Sphinx documentation from python modules
+
+    .. code-block:: cmake
+
+        cmakeme_sphinx_python(PACKAGE pkgname MODULES mod1.py [mod2.py ...])
+
+     ``pkgname``
+        The name of the python package that is being documented
+
+     ``mod1.py``
+        The python modules to document
+
+#]=======================================================================]
+
+function(cmakeme_sphinx_python)
+  # Parse the arguments
+  cmake_parse_arguments(
+    CMAKEME_SPHINX_PYTHON
+    ""
+    "PACKAGE"
+    "MODULES"
+    ${ARGN}
+    )
+  if(CMAKEME_SPHINX_PYTHON_ARGUMENTS)
+    message(FATAL_ERROR "Unrecognized arguments to cmakeme_install: ${CMAKEME_UNPARSED_ARGUMENTS}")
+  endif()
+
+  set(CMAKEME_SPHINX_PYTHON_MOD_RST "")
+  foreach(mod ${CMAKEME_SPHINX_PYTHON_MODULES})
+    set(CMAKEME_SPHINX_PYTHON_MOD_RST "${CMAKEME_SPHINX_PYTHON_MOD_RST}\n.. automodule:: ${mod}\n  :members:\n")
+  endforeach()
+
+  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/index_python.rst.in ${CMAKE_BINARY_DIR}/index_python.rst)
+
+  # TODO: We need the conf.py file setup, then we need to run sphinx
+endfunction()

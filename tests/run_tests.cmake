@@ -17,7 +17,8 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E rm -rf ${TEST_BIN_DIR} COMMAND_ERROR
 # Configure the test project
 message("Configuring cmakeme Test Project")
 execute_process(COMMAND ${CMAKE_COMMAND} -B ${TEST_BIN_DIR} ${TEST_DIR}
-  -DCMAKE_PREFIX_PATH=${CMAKEME_PATH} -DCMAKE_INSTALL_PREFIX=${TEST_BIN_DIR}/install COMMAND_ERROR_IS_FATAL ANY)
+  -DCMAKE_PREFIX_PATH=${CMAKEME_PATH} -DCMAKE_INSTALL_PREFIX=${TEST_BIN_DIR}/install
+  -DBUILD_DOCS=ON COMMAND_ERROR_IS_FATAL ANY)
 
 
 # Build and install the test project

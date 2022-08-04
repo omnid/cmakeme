@@ -104,4 +104,14 @@ function(cmakeme_swig)
     DESTINATION "lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages"
     PATTERN "*.i" EXCLUDE
     PATTERN "*.c" EXCLUDE)
+
+  if(BUILD_DOCS)
+    set(mods "")
+    foreach(lib ${CMAKEME_SWIG_HEADERS})
+      get_filename_component(mod ${lib} NAME_WE)
+      set(mods "${mods} ${mod}.py")
+    endforeach()
+    include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/sphinx/cmakeme_sphinx.cmake)
+    cmakeme_sphinx_python(PACKAGE ${CMAKEME_SWIG_LIBRARY} MODULES ${mods})
+  endif()
 endfunction()

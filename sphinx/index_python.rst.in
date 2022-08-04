@@ -1,0 +1,15 @@
+Welcome to $CMAKEME_SPHINX_PYTHON_PACKAGE@'s documentation!
+================================================
+
+@CMAKEME_SPHINX_PYTHON_MOD_RST@
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
