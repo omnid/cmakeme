@@ -97,7 +97,7 @@ Generate Sphinx documentation from python modules
 
     .. code-block:: cmake
 
-        cmakeme_sphinx_python(PACKAGE pkgname MODULES mod1 [mod2 ...]) 
+        cmakeme_sphinx_python(PACKAGE pkgname MODULES mod1 [mod2 ...] [DEPENDS dep...])
 
      ``pkgname``
         The name of the python package that is being documented
@@ -105,6 +105,11 @@ Generate Sphinx documentation from python modules
      ``mod1``
         The python modules to document, without the .py extension. multiple
         modules may be specified.
+
+     ``dep``
+        Documentation depends on anothe target. For example, if this is being
+        used to generate documentation for swig bindings, it must depend on
+        the swig target being built
 
 #]=======================================================================]
 
@@ -114,7 +119,7 @@ function(cmakeme_sphinx_python)
     CMAKEME_SPHINX_PYTHON
     ""
     "PACKAGE"
-    "MODULES"
+    "MODULES;DEPENDS"
     ${ARGN}
     )
   if(CMAKEME_SPHINX_PYTHON_UNPARSED_ARGUMENTS)
@@ -141,14 +146,33 @@ function(cmakeme_sphinx_python)
 
     # The conf.py file contains the settings for sphinx
     configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/conf_python.py.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/conf.py)
-        find_program(SPHINX_EXECUTABLE
-            NAMES sphinx-build
-            DOC "Sphinx Documentation Builder (sphinx-doc.org)"
+
+    find_program(SPHINX_EXECUTABLE
+      NAMES sphinx-build
+      DOC "Sphinx Documentation Builder (sphinx-doc.org)"
+      )
+
+    if(NOT SPHINX_EXECUTABLE)
+      message(WARNING "SPHINX_EXECUTABLE (sphinx-build) is not found, not generating documentation")
+      return()
+    endif()
+
+    add_custom_target(${CMAKEME_SPHINX_PYTHON_PACKAGE}_docs ALL
+            COMMAND ${SPHINX_EXECUTABLE}
+            -b html
+            -a
+            ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}
+            ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/html
+            > build-html.log
+            COMMENT "sphinx-build html: see build-html.log"
+            VERBATIM
             )
 
-        if(NOT SPHINX_EXECUTABLE)
-            message(WARNING "SPHINX_EXECUTABLE (sphinx-build) is not found, skipping CMAke documentation")
-            return()
-        endif()
+    if(CMAKEME_SPHINX_PYTHON_DEPENDS)
+      add_dependencies(${CMAKEME_SPHINX_PYTHON_PACKAGE}_docs ${CMAKEME_SPHINX_PYTHON_DEPENDS})
+    endif()
+
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/html DESTINATION ${CMAKE_INSTALL_DOCDIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE})
+
   endif()
 endfunction()
