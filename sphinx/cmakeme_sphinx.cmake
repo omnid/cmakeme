@@ -97,13 +97,14 @@ Generate Sphinx documentation from python modules
 
     .. code-block:: cmake
 
-        cmakeme_sphinx_python(PACKAGE pkgname MODULES mod1 [mod2 ...])
+        cmakeme_sphinx_python(PACKAGE pkgname MODULES mod1 [mod2 ...]) 
 
      ``pkgname``
         The name of the python package that is being documented
 
      ``mod1``
-        The python modules to document, without the .py extension
+        The python modules to document, without the .py extension. multiple
+        modules may be specified.
 
 #]=======================================================================]
 
@@ -128,13 +129,26 @@ function(cmakeme_sphinx_python)
     message(FATAL_ERROR "MODULES not specified")
   endif()
 
-  set(CMAKEME_SPHINX_PYTHON_MOD_RST "")
-  foreach(mod ${CMAKEME_SPHINX_PYTHON_MODULES})
-    set(CMAKEME_SPHINX_PYTHON_MOD_RST "${CMAKEME_SPHINX_PYTHON_MOD_RST}\n.. automodule:: ${mod}\n  :members:\n")
-  endforeach()
+  if(BUILD_DOCS)
+    set(CMAKEME_SPHINX_PYTHON_MOD_RST "")
+    foreach(mod ${CMAKEME_SPHINX_PYTHON_MODULES})
+      set(CMAKEME_SPHINX_PYTHON_MOD_RST "${CMAKEME_SPHINX_PYTHON_MOD_RST}\n.. automodule:: ${mod}\n  :members:\n")
+    endforeach()
 
-  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/index_python.rst.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/index.rst)
+    # Make index.rst. For now, all modules are documented in one gian index.rst file
+    # Alternatively we could generate a separate .rst per module and put them together in an index
+    configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/index_python.rst.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/index.rst)
 
-  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/conf_python.py.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/conf.py)
-  # TODO: We need the conf.py file setup, then we need to run sphinx
+    # The conf.py file contains the settings for sphinx
+    configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/conf_python.py.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/conf.py)
+        find_program(SPHINX_EXECUTABLE
+            NAMES sphinx-build
+            DOC "Sphinx Documentation Builder (sphinx-doc.org)"
+            )
+
+        if(NOT SPHINX_EXECUTABLE)
+            message(WARNING "SPHINX_EXECUTABLE (sphinx-build) is not found, skipping CMAke documentation")
+            return()
+        endif()
+  endif()
 endfunction()

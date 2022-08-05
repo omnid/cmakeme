@@ -7,8 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = '@CMAKEME_SPHINX_PYTHON_PACKAGE@'
-copyright = '2022, @conf_copyright@'
-author = '@conf_copyright@'
+#copyright = '2022, @conf_copyright@'
+#author = '@conf_copyright@'
 release = '@CMAKE_PROJECT_VERSION@'
 
 # -- General configuration ---------------------------------------------------

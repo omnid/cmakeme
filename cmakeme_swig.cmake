@@ -21,11 +21,11 @@ Commands
 
             cmakeme_swig_python(LIBRARY target HEADERS header1.h header2.h)
 
-        ``LIBRARY``
+        ``target``
         The name of the C library that should be wrapped. This will also be the name of the
         python wrapper module. This function supports only one python wrapper module per C library,
 
-        ``HEADERS``
+        ``header1.h``
         The headers containing the definitions for which bindings should be generated.
 
 #]=======================================================================]
