@@ -97,13 +97,13 @@ Generate Sphinx documentation from python modules
 
     .. code-block:: cmake
 
-        cmakeme_sphinx_python(PACKAGE pkgname MODULES mod1.py [mod2.py ...])
+        cmakeme_sphinx_python(PACKAGE pkgname MODULES mod1 [mod2 ...])
 
      ``pkgname``
         The name of the python package that is being documented
 
-     ``mod1.py``
-        The python modules to document
+     ``mod1``
+        The python modules to document, without the .py extension
 
 #]=======================================================================]
 
@@ -133,8 +133,8 @@ function(cmakeme_sphinx_python)
     set(CMAKEME_SPHINX_PYTHON_MOD_RST "${CMAKEME_SPHINX_PYTHON_MOD_RST}\n.. automodule:: ${mod}\n  :members:\n")
   endforeach()
 
-  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/index_python.rst.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/index_python.rst)
+  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/index_python.rst.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/index.rst)
 
-  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/conf_python.py ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/conf.py)
+  configure_file(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/conf_python.py.in ${CMAKE_BINARY_DIR}/${CMAKEME_SPHINX_PYTHON_PACKAGE}/conf.py)
   # TODO: We need the conf.py file setup, then we need to run sphinx
 endfunction()

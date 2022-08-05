@@ -15,11 +15,13 @@ struct StrLen
 };
 
 /// \brief retrieve the length of the string
+///
 /// \param str data should be a null terminated string
 /// \return the length of the string, or 10 if not null terminated
 int get_length(struct StrLen str);
 
 /// \brief update the length of the string
+///
 /// \param str data should be a null terminated string
 /// \return true if the string was null terminated
 bool update_length(struct StrLen *);
