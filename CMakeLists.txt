@@ -40,7 +40,7 @@ install(DIRECTORY cpack DESTINATION share/cmakeme)
 install(DIRECTORY sphinx DESTINATION share/cmakeme)
 
 cmakeme_package(EMAIL elwin@northwestern.edu ARCH_ANY)
-enable_testing()
+include(CTest)
 # This test requires that cmakeme has already been installed
 add_test(NAME cmakeme_test COMMAND
   ${CMAKE_COMMAND}
