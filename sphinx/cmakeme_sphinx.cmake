@@ -11,7 +11,7 @@ generating its own documentation in CMake's ``Utilties/Sphinx`` directory
 but can be customized/used by any cmake project.
 
 Use this module with ``find_package(cmakeme)``
-    
+
 #]=======================================================================]
 
 #[=======================================================================[.rst:
@@ -25,16 +25,16 @@ Commands
 ^^^^^^^^
 .. command:: cmakeme_sphinx_cmake
 
-Generate Sphinx documentation from the CMake Source files.  
+Generate Sphinx documentation from the CMake Source files.
 
     .. code-block:: cmake
 
-        cmakeme_defaults(doc_dir orgname org_url copyright)
+        cmakeme_sphinx_cmake(doc_dir orgname org_url copyright)
 
     ``doc_dir``
         Directory containing the ``.rst`` files.  These files can
         include a CMake module by using:
-        
+
         ``.. cmake-module:: path_to_cmake_file`` within a ``.rst`` file.
 
     ``orgname``
