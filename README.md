@@ -26,9 +26,21 @@ cmakeme_install(TARGETS my_lib NAMESPACE my_lib DEPENDS MyDependency)
 # Generate doxygen documentation from source files, and use the README.md as the first page
 cmakeme_doxygen(README.md src/)
 
+# Install a python package (e.g., a pyproject.toml/setup.cfg/setup.py)
+cmakeme_python(path_to_package name_of_package)
+
+# automatically create python bindings for c code using swig
+# In this example `import c_lib_target` will work after installation
+# and provide access to items in `header1.h` and `header2.h`
+cmakeme_swig_python(LIBRARY c_lib_target HEADERS header1.h header2.h)
+
+
+
 # Let the developer create binary packages for various systems by running `make package`
 cmakeme_package(EMAIL myemail@website.com ARCH_64
                 DEBIAN_DEPENDS dep1 dep2 ARCHLINUX_DEPENDS dep1a dep2a)
+
+
 ```
 For more details, see the [API Documentation](https://omnid.github.io/cmakeme)    
 # Installation
