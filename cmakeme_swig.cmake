@@ -13,7 +13,7 @@ Use this module with ``find_package(cmakeme)``
 #[=======================================================================[.rst:
 Commands
 ^^^^^^^^
-    .. command:: cmakeme_swig
+    .. command:: cmakeme_swig_python
 
     Generate SWIG bindings to wrap a C library with python.
 
@@ -30,7 +30,7 @@ Commands
 
 #]=======================================================================]
 
-function(cmakeme_swig)
+function(cmakeme_swig_python)
   if(NOT SWIG_FOUND)
     find_package(SWIG REQUIRED COMPONENTS python)
     include(UseSWIG)
@@ -86,7 +86,7 @@ function(cmakeme_swig)
   endforeach()
 
   file(WRITE "${cmakeme_swig_library_dir}/__init__.py" "from .${CMAKEME_SWIG_LIBRARY} import *")
-  
+ 
   # Add the swig library
   swig_add_library(${CMAKEME_SWIG_LIBRARY}_swig LANGUAGE python
     OUTPUT_DIR ${cmakeme_swig_library_dir}
