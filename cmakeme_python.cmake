@@ -23,7 +23,7 @@ Commands
 
         .. code-block:: cmake
 
-            cmakeme_python(setup directory pkgname)
+            cmakeme_python(directory pkgname)
 
         ``directory``
         Absolute path to the directory containing setup.py/setup.cfg
@@ -40,20 +40,29 @@ function(cmakeme_python directory pkgname)
   # Build the wheel during code generation time
   set(outdir "${CMAKE_BINARY_DIR}/dist")
 
-  # This target actually builds the wheel
+  # directory where the whl file is extracted
+  set(wheeldir ${outdir}/extracted_whl/${pkgname})
+
+  # This target makes the directory where the wheel will be extracted
+  # It must be it's own target because it must happen prior to
+  # the $[pkgname}-python target's WORKING_DIRECTORY being set
+  add_custom_target(${pkgname}-make-wheel-dir ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${wheeldir}
+    )
+
+  # This target builds the wheel and then extracts it to the directory specified by WORKING_DIRECTORY
+  # (we use WORKING_DIRECTORY because cmake -E tar has no way to specify an output directory)
   add_custom_target(${pkgname}-python ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${outdir}
     COMMAND ${Python3_EXECUTABLE} -m build ${directory} --outdir ${outdir}
+    COMMAND ${CMAKE_COMMAND} -E tar x ${outdir}/${pkgname}-*.whl --format=zip
+    WORKING_DIRECTORY ${wheeldir}
+    DEPENDS ${pkgname}-make-wheel-dir
     )
 
-  # This target gets the wheel filename (which is difficult to compute beforehand)
-  add_custom_target(${pkgname}-python-wheel ALL
-    COMMAND ${CMAKE_COMMAND} -E echo ${outdir}/${pkgname}-*.whl > ${outdir}/${pkgname}-wheel-name
-    DEPENDS ${pkgname}-python
-    )
+  # The wheel was extracted by ${pkgname}-python, now it just needs to be installed
+  # The ending slash is so that the top-level directory is not copied
+  install(DIRECTORY ${wheeldir}/
+    DESTINATION "lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages")
 
-  # Install the wheel. This requires us to read the wheel name and then use it to install. We must remove the old wheel first
-  # Note: Use OUTPUT_VARIABLE to capture output of execute_process. Results can be output using message(), which is useful for debugging
-  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E cat ${outdir}/${pkgname}-wheel-name OUTPUT_VARIABLE wheel_name)
-                execute_process(COMMAND ${Python3_EXECUTABLE} -m pip install --force-reinstall --prefix ${CMAKE_INSTALL_PREFIX} \${wheel_name})")
 endfunction()
