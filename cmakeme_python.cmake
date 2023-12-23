@@ -54,7 +54,7 @@ function(cmakeme_python directory pkgname)
   # (we use WORKING_DIRECTORY because cmake -E tar has no way to specify an output directory)
   add_custom_target(${pkgname}-python ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${outdir}
-    COMMAND ${Python3_EXECUTABLE} -m build ${directory} --outdir ${outdir}
+    COMMAND ${Python3_EXECUTABLE} -m build --wheel --outdir ${outdir} ${directory}
     COMMAND ${CMAKE_COMMAND} -E tar x ${outdir}/${pkgname}-*.whl --format=zip
     WORKING_DIRECTORY ${wheeldir}
     DEPENDS ${pkgname}-make-wheel-dir
