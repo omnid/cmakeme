@@ -11,11 +11,12 @@ include(${CMAKEME_ROOT_DIR}/cmakeme_swig.cmake)
 
 # Add useful default compiler options here, for each system.  Users can opt-in to these
 # We treat the target as IMPORTED so that a new copy of the library is not actually created
-# and therefore the user is not responsible for installing it
+# and therefore the user is not responsible for installing it.
+# -fmacro-prefix-map makes the build more reproducible by stripping full paths from __FILE__
 add_library(cmakeme_flags INTERFACE IMPORTED)
 target_compile_options(cmakeme_flags INTERFACE
-  $<$<C_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra >    
-  $<$<CXX_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra>    
+  $<$<C_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
+  $<$<CXX_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
   $<$<C_COMPILER_ID:TI>:-pden -pdr -pdv --c99 --diag_suppress=270>
   )
 # Detect the enabled languages

@@ -8,6 +8,7 @@ Libraries
 .. variable:: cmakeme_flags 
 
 Interface library containing compile flags with options that enable many compiler warnings, C++17, and C99 (for gcc, clang and TI compilers).
+On gcc/clang, this library also configures the `__FILE__`  macro to be reproducible: it will only display paths relative to the project directory.
 
 Configuration Variables
 ^^^^^^^^^^^^^^^^^^^^^^^
