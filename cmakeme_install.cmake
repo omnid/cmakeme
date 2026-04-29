@@ -171,6 +171,7 @@ function(cmakeme_install)
     RUNTIME DESTINATION ${bindir}
     LIBRARY DESTINATION  ${libdir}
     ARCHIVE DESTINATION  ${libdir}
+    OBJECTS DESTINATION ${libdir}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
