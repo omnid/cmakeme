@@ -14,34 +14,34 @@ Commands
 .. command:: cmakeme_install
 
     The ``cmakeme_install()`` function installs the specified targets along
-    with any include files in ``INTERFACE_INCLUDE_DIRECTORIES`` or source files 
+    with any include files in ``INTERFACE_INCLUDE_DIRECTORIES`` or source files
     in ``INTERFACE_SOURCES``. If the target is a library it will be setup to be
-    imported from other cmake files. 
+    imported from other cmake files.
 
     .. code-block:: cmake
 
-      cmakeme_install(TARGETS targets... 
+      cmakeme_install(TARGETS targets...
                 [NAMESPACE ns]
                 [ARCH_INDEPENDENT]
                 [PACKAGE_NAME name]
                 [DEPENDS deps..]
                 )
 
-    ``TARGETS targets`` 
+    ``TARGETS targets``
     The targets that should be installed.
     This is the only option necessary if the targets do not need to be found by other cmake modules.
     If target.bin is also defined as a target it will be installed as well.
 
-    ``NAMESPACE ns`` 
+    ``NAMESPACE ns``
     Namespace for name.
     If not specified the targets will not be exported.
-    Do not include the `::` after the namespace.  
+    Do not include the `::` after the namespace.
     Link against the configured targets by passing `ns::target` to `target_link_libraries`
-    
+
     ``ARCH_INDEPENDENT``
     Specify for an architecture-independent library, such as a header-only library.
 
-    ``PACKAGE_NAME name`` 
+    ``PACKAGE_NAME name``
     The name of the package, as used by `find_package`. So the package will be imported via `find_package(name)` defaults to the value of `ns`
 
     ``DEPENDS deps``
@@ -51,11 +51,20 @@ Commands
     the path searched by `find_package` (e.g., `install(FILES myfile-config.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/${DATADIR}/omnid_parameters)`)
 
     .. note::
-        Use ``target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>)`` to add include directories 
+        Use ``target_include_directories(target INTERFACE $<BUILD_INTERFACE:directory>)`` to add include directories
+        Use ``target_include_directories(target INTERFACE $<BUILD_INTERFACE:$<$<PLATFORM_ID:platform>:directory>>)`` to add include directories
+        only when compiled for a specific platform.
+
         and ``target_sources(target INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source1>... )`` to add source files.
+
         The ``$<BUILD_INTERFACE:>`` generator expression only adds the items in it during build time since the install location is different.
         At install time, typically you would specify an install location with ``$<INSTALL_INTERFACE:>``; however ``cmakeme_install``
         automatically computes the install destination based on the ``BUILD_INTERFACE`` values.
+
+        The usage of ``target_include_directories`` in a manner compatible with ``cmakeme_install`` is somewhat restricted:
+        It uses special handling to detect the actual include file names when enclosed in the $<BUILD_INTERFACE> generator
+        expression and for handling platform-specific includes with $<$<PLATFORM_ID>:>.
+
 
 
 Results Variables
@@ -77,7 +86,11 @@ Basic usage for installing a library and executable:
     add_executable(target1 file1.c file2.c)
     add_library(lib1 file3.c)
     target_link_libraries(lib1 PUBLIC dep1)
-    target_include_directories(lib1 PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+    target_include_directories(lib1 PUBLIC
+      # Headers for all platforms
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      # Headers that are only for linux
+      $<BUILD_INTERFACE:$<$<PLATFORM_ID:Linux>:${CMAKE_CURRENT_SOURCE_DIR}/linux/include>>)
     cmakeme_install(TARGETS target1 lib1 NAMESPACE mylib DEPENDS dep1)
 
 Once installed the library `lib1` can then be used from another cmake project:
@@ -132,6 +145,9 @@ function(cmakeme_install)
       # if the include directory is within the source code we should install it.
       # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
       string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" incdir ${incdir})
+      # Next, remove the platform ID
+      string(REGEX REPLACE "\\$<\\$<PLATFORM_ID:(.*)>:(.*)>" "\\2" incdir ${incdir})
+
       # then make sure that the include file is from within the project (either the source directory or generated in the build directory) and
       # not something that comes from an external project
       string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with_source)
@@ -148,6 +164,9 @@ function(cmakeme_install)
     foreach(src ${srcs})
       # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
       string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" src ${src})
+      # Next, remove the platform ID
+      string(REGEX REPLACE "\\$<\\$<PLATFORM_ID:(.*)>:(.*)>" "\\2" src ${src})
+
       # Next, ensure that the source file is from with the project
       string(FIND ${src} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
       if(starts_with EQUAL 0)
@@ -165,7 +184,7 @@ function(cmakeme_install)
     endif()
   endforeach()
 
-  
+
   install(TARGETS ${CMAKEME_TARGETS}
     EXPORT ${CMAKEME_PACKAGE_NAME}-targets
     RUNTIME DESTINATION ${bindir}
@@ -186,7 +205,7 @@ function(cmakeme_install)
       DESTINATION ${libdir}/${CMAKEME_PACKAGE_NAME}
       )
 
-    if(CMAKEME_ARCH_INDEPENDENT) 
+    if(CMAKEME_ARCH_INDEPENDENT)
       write_basic_package_version_file(
         ${CMAKEME_PACKAGE_NAME}-config-version.cmake
         COMPATIBILITY SameMajorVersion
@@ -207,13 +226,13 @@ function(cmakeme_install)
         "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKEME_PACKAGE_NAME}-targets.cmake)\n")
     file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
         "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKEME_PACKAGE_NAME}-targets.cmake)\n")
-    
+
     foreach(dep ${CMAKEME_DEPENDS})
       file(APPEND ${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
         "find_dependency(${dep})\n")
     endforeach()
     # The configure file is now generated it is a template designed to be used with configure_package_config_file
-    
+
     # Used in case we need to export directories from NuhalConfig.cmake
     configure_package_config_file(${CMAKE_BINARY_DIR}/${CMAKEME_PACKAGE_NAME}-config.cmake.in
       ${CMAKEME_PACKAGE_NAME}-config.cmake
@@ -228,7 +247,7 @@ endfunction()
 
 #[=======================================================================[.rst:
 .. command:: cmakeme_installdirs
-    
+
 The ``cmakeme_installdirs`` macro sets up GNUInstallDirs variables, even if no language is enabled.
 This is called directly when you ``find_package(cmakeme)`` so usually this does not need to be called explicitly
 
@@ -236,7 +255,7 @@ This is called directly when you ``find_package(cmakeme)`` so usually this does 
 
       cmakeme_installdirs()
 #]=======================================================================]
-    
+
 # fake a language being enabled if it was not to supress warnings from GNUInstallDirs
 # This is a hack, but it is possible to want to know install directories without actually
 # compiling anything
