@@ -18,12 +18,18 @@ configure_package_config_file(cmakeme-config.cmake.in cmakeme-config.cmake
   PATH_VARS INSTALL_DIR
   )
 
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/cmakeme-config-version.cmake"
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion)
+
 set(CMAKEME_ROOT_DIR ${CMAKE_SOURCE_DIR})
 
 cmakeme_sphinx_cmake(${CMAKE_SOURCE_DIR}/doc Omnid ../../omnid/cxx/index.html "2022 by Matthew Elwin")
 
 install(FILES
   ${CMAKE_BINARY_DIR}/cmakeme-config.cmake #generated file
+  ${CMAKE_BINARY_DIR}/cmakeme-config-version.cmake #generated file
   cmakeme_defaults.cmake
   cmakeme_doxygen.cmake
   cmakeme_install.cmake
