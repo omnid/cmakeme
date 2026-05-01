@@ -5,12 +5,68 @@ Helper function for typical cmake installation scenarios.
 
 Use this module with ``find_package(cmakeme)``
 
+Commands
+^^^^^^^^
 #]=======================================================================]
 
 #[=======================================================================[.rst:
-Commands
-^^^^^^^^
+.. command:: cmakeme_resolve_dir
 
+    The ``cmakeme_resolve_dir()`` function resolves a possibly generator-expression
+    based directory into a concrete path.
+
+    It supports expressions of the form:
+
+    - ``$<BUILD_INTERFACE:...>``
+    - ``$<BUILD_INTERFACE:$<$<PLATFORM_ID:...>...>``
+    - ``$<$<PLATFORM_ID:...>:...>``
+
+    If a ``$<PLATFORM_ID:..>`` is present and does not match
+    ``CMAKE_SYSTEM_NAME``, the result is set to an empty string.
+
+    The result is also set to an empty string if the directory is
+    not inside the source directory
+
+    The input variable is modified in-place.
+
+    .. code-block:: cmake
+
+        resolve_dir(dir)
+
+    :param dir: Include directory expression (modified in-place)
+#]=======================================================================]
+function(cmakeme_resolve_dir dir)
+  # dir is a reference so derference it to get the value
+  set(tmpdir ${${dir}})
+
+  # Strip BUILD_INTERFACE wrapper
+  string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" tmpdir ${tmpdir})
+
+  # Extract PLATFORM_ID if present, otherwise the system is ${CMAKE_SYSTEM_NAME}
+  string(REGEX MATCH "\\$<PLATFORM_ID:([^>]+)>" match ${tmpdir})
+  if(match)
+    set(system ${CMAKE_MATCH_1})
+  else()
+    set(system ${CMAKE_SYSTEM_NAME})
+  endif()
+
+  # Remove nested PLATFORM_ID conditional expression
+  string(REGEX REPLACE "\\$<\\$<PLATFORM_ID:[^>]+>:(.*)>" "\\1" tmpdir "${tmpdir}")
+
+  # Test if the directory is from within the project
+  # (either in the source directory or generated in the binary tmpdirectory)
+  string(FIND "${tmpdir}" ${CMAKE_CURRENT_SOURCE_DIR} starts_with_source)
+  string(FIND "${tmpdir}" ${CMAKE_CURRENT_BINARY_DIR} starts_with_bin)
+
+  if((system STREQUAL ${CMAKE_SYSTEM_NAME})
+      AND ((starts_with_source EQUAL 0) OR (starts_with_bin EQUAL 0)))
+      set(${dir} ${tmpdir} PARENT_SCOPE)
+  else()
+    set(${dir} "" PARENT_SCOPE)
+  endif()
+endfunction()
+
+#[=======================================================================[.rst:
 .. command:: cmakeme_install
 
     The ``cmakeme_install()`` function installs the specified targets along
@@ -64,7 +120,6 @@ Commands
         The usage of ``target_include_directories`` in a manner compatible with ``cmakeme_install`` is somewhat restricted:
         It uses special handling to detect the actual include file names when enclosed in the $<BUILD_INTERFACE> generator
         expression and for handling platform-specific includes with $<$<PLATFORM_ID>:>.
-
 
 
 Results Variables
@@ -142,34 +197,19 @@ function(cmakeme_install)
     endif()
 
     foreach(incdir ${dirs})
-      # if the include directory is within the source code we should install it.
-      # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
-      string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" incdir ${incdir})
-      # Next, remove the platform ID
-      string(REGEX REPLACE "\\$<\\$<PLATFORM_ID:(.*)>:(.*)>" "\\2" incdir ${incdir})
-
-      # then make sure that the include file is from within the project (either the source directory or generated in the build directory) and
-      # not something that comes from an external project
-      string(FIND ${incdir} ${CMAKE_CURRENT_SOURCE_DIR} starts_with_source)
-      string(FIND ${incdir} ${CMAKE_CURRENT_BINARY_DIR} starts_with_bin)
-      if((starts_with_source EQUAL 0) OR (starts_with_bin EQUAL 0))
-        # make sure the directory ends with a /
-        string(APPEND incdir "/")
-        string(REPLACE "//" "/" incdir ${incdir})
-        install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+      cmakeme_resolve_dir(incdir)
+      if(incdir)
+          # make sure the directory ends with a /
+          string(APPEND incdir "/")
+          string(REPLACE "//" "/" incdir ${incdir})
+          install(DIRECTORY ${incdir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
       endif()
     endforeach()
 
     get_target_property(srcs ${target} INTERFACE_SOURCES)
     foreach(src ${srcs})
-      # First, remove $<BUILD_INTERFACE:> generator expression to get the directory
-      string(REGEX REPLACE "\\$<BUILD_INTERFACE:(.*)>" "\\1" src ${src})
-      # Next, remove the platform ID
-      string(REGEX REPLACE "\\$<\\$<PLATFORM_ID:(.*)>:(.*)>" "\\2" src ${src})
-
-      # Next, ensure that the source file is from with the project
-      string(FIND ${src} ${CMAKE_CURRENT_SOURCE_DIR} starts_with)
-      if(starts_with EQUAL 0)
+      cmakeme_resolve_dir(src)
+      if(src)
         file(GLOB filerel RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${src})
         get_filename_component(reldir ${filerel} DIRECTORY)
         install(FILES ${src} DESTINATION ${CMAKE_INSTALL_PREFIX}/${libdir}/${target}/${reldir})
@@ -270,3 +310,5 @@ macro(cmakeme_installdirs)
         include(GNUInstallDirs)
     endif()
 endmacro()
+
+
