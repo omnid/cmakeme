@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(cmakeme LANGUAGES NONE VERSION 0.2.0)
+project(cmakeme LANGUAGES NONE VERSION 1.0.0)
 
 # Since cmakeme is not installed, we load the individual modules manually
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmakeme_defaults.cmake)
