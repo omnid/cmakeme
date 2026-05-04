@@ -1,36 +1,38 @@
-@PACKAGE_INIT@
-set(CMAKEME_ROOT_DIR @PACKAGE_INSTALL_DIR@)
-include(${CMAKEME_ROOT_DIR}/cmakeme_defaults.cmake)
-include(${CMAKEME_ROOT_DIR}/cmakeme_install.cmake)
-include(${CMAKEME_ROOT_DIR}/git_hash.cmake)
-include(${CMAKEME_ROOT_DIR}/cmakeme_pack.cmake)
-include(${CMAKEME_ROOT_DIR}/cmakeme_python.cmake)
-include(${CMAKEME_ROOT_DIR}/cmakeme_doxygen.cmake)
-include(${CMAKEME_ROOT_DIR}/sphinx/cmakeme_sphinx.cmake)
-include(${CMAKEME_ROOT_DIR}/cmakeme_swig.cmake)
+if(NOT cmakeme_FOUND)
+  @PACKAGE_INIT@
+  set(CMAKEME_ROOT_DIR @PACKAGE_INSTALL_DIR@)
+  include(${CMAKEME_ROOT_DIR}/cmakeme_defaults.cmake)
+  include(${CMAKEME_ROOT_DIR}/cmakeme_install.cmake)
+  include(${CMAKEME_ROOT_DIR}/git_hash.cmake)
+  include(${CMAKEME_ROOT_DIR}/cmakeme_pack.cmake)
+  include(${CMAKEME_ROOT_DIR}/cmakeme_python.cmake)
+  include(${CMAKEME_ROOT_DIR}/cmakeme_doxygen.cmake)
+  include(${CMAKEME_ROOT_DIR}/sphinx/cmakeme_sphinx.cmake)
+  include(${CMAKEME_ROOT_DIR}/cmakeme_swig.cmake)
 
-# Add useful default compiler options here, for each system.  Users can opt-in to these
-# We treat the target as IMPORTED so that a new copy of the library is not actually created
-# and therefore the user is not responsible for installing it.
-# -fmacro-prefix-map makes the build more reproducible by stripping full paths from __FILE__
-add_library(cmakeme_flags INTERFACE IMPORTED)
-target_compile_options(cmakeme_flags INTERFACE
-  $<$<C_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
-  $<$<CXX_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
-  $<$<C_COMPILER_ID:TI>:-pden -pdr -pdv --c99 --diag_suppress=270>
-  )
-# Detect the enabled languages
-get_property(ENABLED_LANGS GLOBAL  PROPERTY ENABLED_LANGUAGES)
+  # Add useful default compiler options here, for each system.  Users can opt-in to these
+  # We treat the target as IMPORTED so that a new copy of the library is not actually created
+  # and therefore the user is not responsible for installing it.
+  # -fmacro-prefix-map makes the build more reproducible by stripping full paths from __FILE__
+  add_library(cmakeme_flags INTERFACE IMPORTED)
+  target_compile_options(cmakeme_flags INTERFACE
+    $<$<C_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
+    $<$<CXX_COMPILER_ID:GNU,CLANG>:  -pedantic -pipe -Wall -Wextra -fmacro-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}/=$<TARGET_PROPERTY:NAME>:>
+    $<$<C_COMPILER_ID:TI>:-pden -pdr -pdv --c99 --diag_suppress=270>
+    )
+  # Detect the enabled languages
+  get_property(ENABLED_LANGS GLOBAL  PROPERTY ENABLED_LANGUAGES)
 
-if ("C" IN_LIST ENABLED_LANGS)
-    target_compile_features(cmakeme_flags INTERFACE c_std_99)
+  if ("C" IN_LIST ENABLED_LANGS)
+      target_compile_features(cmakeme_flags INTERFACE c_std_99)
+  endif()
+
+  if ("CXX" IN_LIST ENABLED_LANGS)
+      target_compile_features(cmakeme_flags INTERFACE cxx_std_17)
+  endif()
+
+  cmakeme_installdirs()
+
+
+  option(BUILD_DOCS "Build all of the documentation generated using cmakeme" OFF)
 endif()
-
-if ("CXX" IN_LIST ENABLED_LANGS)
-    target_compile_features(cmakeme_flags INTERFACE cxx_std_17)
-endif()
-
-cmakeme_installdirs()
-
-
-option(BUILD_DOCS "Build all of the documentation generated using cmakeme" OFF)
