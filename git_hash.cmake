@@ -3,7 +3,7 @@ git_hash
 --------
 
     Generate git hashes for project source code and access them via constants
-    defined in header files. You can retrieve the SHA1 hash that git uses for the 
+    defined in header files. You can retrieve the SHA1 hash that git uses for the
     current commit, the SHA1 hash of any subset of files, and the current commit status
     (dirty or clean).
 
@@ -15,7 +15,7 @@ generate a header file called ``${PROJECT_NAME}_git_hash.h``.
 To use from your project (called ``myprojecct``)
 
 .. code-block:: cpp
-    
+
     #include"myproject/myproject_git_hash.h"
     // my_project_git_hash.h provides the following defines:
     #define GIT_HASH_HEAD  // The SHA1 hash of the HEAD of the git repository
@@ -81,7 +81,7 @@ function(cmakeme_interface_libraries library interface)
   endif()
   set(${interface} "${${interface}}" PARENT_SCOPE)
 endfunction()
-  
+
 #[=======================================================================[.rst:
 .. command:: cmakeme_hash
 
@@ -102,7 +102,7 @@ For example, if the project name is ``myproject`` and the target name is ``mytar
     #include"myproject/myproject_git_hash.h" // git hashes for the overall project
     #define GIT_HASH_mytarget // git hash for the specified target
 
-.. note::    
+.. note::
 
   Include sparingly, as any file that includes the header file is recompiled every time you build.
 #]=======================================================================]
