@@ -110,9 +110,21 @@ For example, if the project name is ``myproject`` and the target name is ``mytar
 
 function(cmakeme_hash target)
   get_target_property(githash_libs ${target} LINK_LIBRARIES)
+  if(NOT githash_libs)
+    set(githash_libs "")
+  endif()
   get_target_property(githash_sources ${target} SOURCES)
+  if(NOT githash_sources)
+    set(githash_sources "")
+  endif()
   get_target_property(githash_includes ${target} INCLUDE_DIRECTORIES)
+  if(NOT githash_includes)
+    set(githash_includes "")
+  endif()
   get_target_property(githash_srcdir ${target} SOURCE_DIR)
+  if(NOT githash_srcdir)
+    set(githash_srcdir "")
+  endif()
 
 
   # Gather up recursive interface libraries from the libraries that are linked against the target
