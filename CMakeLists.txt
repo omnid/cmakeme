@@ -54,12 +54,16 @@ include(CTest)
 if(BUILD_TESTING)
   find_package(Python REQUIRED COMPONENTS Interpreter)
 
+  # Do a "staged" installation so that the tests cna use it
+  add_custom_target(staged_install ALL
+    COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR} --prefix ${CMAKE_BINARY_DIR}/stage)
+
   # This test requires that cmakeme has already been installed
   add_test(NAME cmakeme_test COMMAND
     ${CMAKE_COMMAND}
     -DTEST_BIN_DIR=${CMAKE_BINARY_DIR}/tests
     -DTEST_DIR=${CMAKE_CURRENT_LIST_DIR}/tests
-    -DCMAKEME_PATH=${CMAKE_INSTALL_PREFIX}/${INSTALL_DIR}
+    -Dcmakeme_DIR=${CMAKE_BINARY_DIR}/stage/${CMAKE_INSTALL_DATADIR}/cmakeme
     -DPYTHON_EXE=${Python_EXECUTABLE}
     -DPYTHON_SITE_DIR=install/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages
     -P ${CMAKE_CURRENT_LIST_DIR}/tests/run_tests.cmake
