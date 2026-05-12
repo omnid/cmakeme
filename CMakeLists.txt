@@ -61,8 +61,8 @@ if(BUILD_TESTING)
   # This test requires that cmakeme has already been installed
   add_test(NAME cmakeme_test COMMAND
     ${CMAKE_COMMAND}
-    -DTEST_BIN_DIR=${CMAKE_BINARY_DIR}/tests
-    -DTEST_DIR=${CMAKE_CURRENT_LIST_DIR}/tests
+    -DTEST_BIN_DIR=${CMAKE_BINARY_DIR}/tests/testpy
+    -DTEST_DIR=${CMAKE_CURRENT_LIST_DIR}/tests/testpy
     -Dcmakeme_DIR=${CMAKE_BINARY_DIR}/stage/${CMAKE_INSTALL_DATADIR}/cmakeme
     -DPYTHON_EXE=${Python_EXECUTABLE}
     -DPYTHON_SITE_DIR=install/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages
