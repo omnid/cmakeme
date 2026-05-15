@@ -4,11 +4,12 @@ verify_file_exists(${TEST_BIN_DIR}/install/include/githash_test/githash_test_lib
 verify_file_exists(${TEST_BIN_DIR}/install/include/githash_test/githash_test_git_hash.h)
 
 execute_process(COMMAND ${TEST_BIN_DIR}/install/bin/githash_test_exe
-  OUTPUT_VARIABLE hashes)
+  OUTPUT_VARIABLE hashes OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 find_package(Git REQUIRED)
+message("SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse HEAD OUTPUT_VARIABLE current_git_hash
-OUTPUT_STRIP_TRAILING_WHITESPACE)
+  WORKING_DIRECTORY ${TEST_DIR} OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 # split the output on newline
 string(REPLACE "\n" ";" hash_list ${hashes})
@@ -23,11 +24,11 @@ endif()
 set(expected_lib_hash "f8d51dd2f1aa346cc0f4413e8315ba189eb7829f")
 if(NOT (GIT_HASH_GITHASH_TEST_LIB STREQUAL expected_lib_hash))
     message(FATAL_ERROR "GIT_HASH_GITHASH_TEST_LIB is ${GIT_HASH_GITHASH_TEST_LIB},
- expected ${expected_lib_head}")
+ expected ${expected_lib_hash}")
 endif()
 
 set(expected_exe_hash "f8d51dd2f1aa346cc0f4413e8315ba189eb7829f")
 if(NOT (GIT_HASH_GITHASH_TEST_LIB STREQUAL expected_exe_hash))
     message(FATAL_ERROR "GIT_HASH_GITHASH_TEST_LIB is ${GIT_HASH_GITHASH_TEST_LIB},
- expected ${expected_exe_head}")
+ expected ${expected_exe_hash}")
 endif()
