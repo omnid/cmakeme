@@ -161,7 +161,7 @@ function(cmakeme_hash target)
   list(APPEND githash_files ${githash_sources})
   # replace the semicolons in the list with spaces to separate files
   add_custom_target(git_hash_${target}
-    COMMAND ${CMAKE_BINARY_DIR}/git_hash_target.bash ${target} ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${target}_hash.h ${githash_files} ${githash_includes} ${githash_srcdir}/CMakeLists.txt
+    COMMAND ${CMAKE_BINARY_DIR}/git_hash_target.bash ${target} ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${target}_hash.h ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${githash_files} ${githash_includes} ${githash_srcdir}/CMakeLists.txt
     COMMENT "Updating ${target}_hash.h"
     BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${target}_hash.h
     VERBATIM

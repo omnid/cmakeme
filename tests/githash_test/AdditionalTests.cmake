@@ -27,8 +27,8 @@ if(NOT (GIT_HASH_GITHASH_TEST_LIB STREQUAL expected_lib_hash))
  expected ${expected_lib_hash}")
 endif()
 
-set(expected_exe_hash "f8d51dd2f1aa346cc0f4413e8315ba189eb7829f")
-if(NOT (GIT_HASH_GITHASH_TEST_LIB STREQUAL expected_exe_hash))
-    message(FATAL_ERROR "GIT_HASH_GITHASH_TEST_LIB is ${GIT_HASH_GITHASH_TEST_LIB},
+set(expected_exe_hash "7215001e31aa87e2bbcfb32b1a506c70d299393a")
+if(NOT (GIT_HASH_GITHASH_TEST_EXE  STREQUAL expected_exe_hash))
+    message(FATAL_ERROR "GIT_HASH_GITHASH_TEST_EXE is ${GIT_HASH_GITHASH_TEST_EXE},
  expected ${expected_exe_hash}")
 endif()
