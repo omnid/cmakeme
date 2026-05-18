@@ -21,13 +21,33 @@ if(NOT (GIT_HASH_HEAD STREQUAL current_git_hash))
   message(FATAL_ERROR "GIT_HASH_HEAD is ${GIT_HASH_HEAD}, expected ${current_git_hash}")
 endif()
 
-set(expected_lib_hash "f8d51dd2f1aa346cc0f4413e8315ba189eb7829f")
+# Manually hash the files that should go into githash lib
+execute_process(COMMAND ${CMAKE_COMMAND} -E cat
+  "${TEST_DIR}/include/githash_lib.h"
+  "${TEST_BIN_DIR}/cmakeme/include/githash_test/githash_test_git_hash.h"
+  "${TEST_DIR}/lib/githash_lib.c"
+  "${TEST_DIR}/include/githash_lib.h"
+  "${TEST_DIR}/CMakeLists.txt"
+  COMMAND ${GIT_EXECUTABLE} hash-object --stdin
+  OUTPUT_VARIABLE expected_lib_hash
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 if(NOT (GIT_HASH_GITHASH_TEST_LIB STREQUAL expected_lib_hash))
-    message(FATAL_ERROR "GIT_HASH_GITHASH_TEST_LIB is ${GIT_HASH_GITHASH_TEST_LIB},
- expected ${expected_lib_hash}")
+    message(FATAL_ERROR "GIT_HASH_GITHASH_TEST_LIB is ${GIT_HASH_GITHASH_TEST_LIB}, expected ${expected_lib_hash}")
 endif()
 
-set(expected_exe_hash "7215001e31aa87e2bbcfb32b1a506c70d299393a")
+# Manually hash the files that should go into githash exe
+execute_process(COMMAND ${CMAKE_COMMAND} -E cat
+  "${TEST_DIR}/include/githash_lib.h"
+  "${TEST_BIN_DIR}/cmakeme/include/githash_test/githash_test_git_hash.h"
+  "${TEST_BIN_DIR}/cmakeme/include/githash_test/githash_test_lib_hash.h"
+  "${TEST_BIN_DIR}/libgithash_test_lib.a"
+  "${TEST_DIR}/githash_test_exe.c"
+  "${TEST_DIR}/CMakeLists.txt"
+  COMMAND ${GIT_EXECUTABLE} hash-object --stdin
+  OUTPUT_VARIABLE expected_exe_hash
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 if(NOT (GIT_HASH_GITHASH_TEST_EXE  STREQUAL expected_exe_hash))
     message(FATAL_ERROR "GIT_HASH_GITHASH_TEST_EXE is ${GIT_HASH_GITHASH_TEST_EXE},
  expected ${expected_exe_hash}")
