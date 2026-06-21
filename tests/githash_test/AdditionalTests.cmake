@@ -39,8 +39,8 @@ endif()
 # Manually hash the files that should go into githash exe
 execute_process(COMMAND ${CMAKE_COMMAND} -E cat
   "${TEST_DIR}/include/githash_lib.h"
-  "${TEST_BIN_DIR}/cmakeme/include/githash_test/githash_test_git_hash.h"
   "${TEST_BIN_DIR}/cmakeme/include/githash_test/githash_test_lib_hash.h"
+  "${TEST_BIN_DIR}/cmakeme/include/githash_test/githash_test_git_hash.h"
   "${TEST_BIN_DIR}/libgithash_test_lib.a"
   "${TEST_DIR}/githash_test_exe.c"
   "${TEST_DIR}/CMakeLists.txt"
