@@ -3,7 +3,7 @@ git_hash
 --------
 
     Generate git hashes for project source code and access them via constants
-    defined in header files. You can retrieve the SHA1 hash that git uses for the 
+    defined in header files. You can retrieve the SHA1 hash that git uses for the
     current commit, the SHA1 hash of any subset of files, and the current commit status
     (dirty or clean).
 
@@ -15,7 +15,7 @@ generate a header file called ``${PROJECT_NAME}_git_hash.h``.
 To use from your project (called ``myprojecct``)
 
 .. code-block:: cpp
-    
+
     #include"myproject/myproject_git_hash.h"
     // my_project_git_hash.h provides the following defines:
     #define GIT_HASH_HEAD  // The SHA1 hash of the HEAD of the git repository
@@ -81,7 +81,7 @@ function(cmakeme_interface_libraries library interface)
   endif()
   set(${interface} "${${interface}}" PARENT_SCOPE)
 endfunction()
-  
+
 #[=======================================================================[.rst:
 .. command:: cmakeme_hash
 
@@ -102,7 +102,7 @@ For example, if the project name is ``myproject`` and the target name is ``mytar
     #include"myproject/myproject_git_hash.h" // git hashes for the overall project
     #define GIT_HASH_mytarget // git hash for the specified target
 
-.. note::    
+.. note::
 
   Include sparingly, as any file that includes the header file is recompiled every time you build.
 #]=======================================================================]
@@ -110,9 +110,29 @@ For example, if the project name is ``myproject`` and the target name is ``mytar
 
 function(cmakeme_hash target)
   get_target_property(githash_libs ${target} LINK_LIBRARIES)
-  get_target_property(githash_sources ${target} SOURCES)
+  if(NOT githash_libs)
+    set(githash_libs "")
+  endif()
+  get_target_property(githash_sources_rel ${target} SOURCES)
+  if(NOT githash_sources_rel)
+    set(githash_sources_rel "")
+  endif()
+  # make sure we have the full path
+  foreach(source IN LISTS githash_sources_rel)
+    if(IS_ABSOLUTE ${source})
+      list(APPEND githash_sources ${source})
+    else()
+      list(APPEND githash_sources ${CMAKE_CURRENT_SOURCE_DIR}/${source})
+    endif()
+  endforeach()
   get_target_property(githash_includes ${target} INCLUDE_DIRECTORIES)
+  if(NOT githash_includes)
+    set(githash_includes "")
+  endif()
   get_target_property(githash_srcdir ${target} SOURCE_DIR)
+  if(NOT githash_srcdir)
+    set(githash_srcdir "")
+  endif()
 
 
   # Gather up recursive interface libraries from the libraries that are linked against the target
@@ -141,7 +161,11 @@ function(cmakeme_hash target)
   list(APPEND githash_files ${githash_sources})
   # replace the semicolons in the list with spaces to separate files
   add_custom_target(git_hash_${target}
-    COMMAND ${CMAKE_BINARY_DIR}/git_hash_target.bash ${target} ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${target}_hash.h ${githash_files} ${githash_includes} ${githash_srcdir}/CMakeLists.txt
+    COMMAND ${CMAKE_BINARY_DIR}/git_hash_target.bash
+    ${target}
+    ${CMAKE_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${target}_hash.h
+    ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${githash_files} ${githash_includes} ${githash_srcdir}/CMakeLists.txt
     COMMENT "Updating ${target}_hash.h"
     BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/cmakeme/include/${PROJECT_NAME}/${target}_hash.h
     VERBATIM
